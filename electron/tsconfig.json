@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "outDir": "../build/electron",
+    "rootDir": ".", // important for preserving folder structure
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "types": [
+      "node",
+      "electron"
+    ]
+  },
+  "include": [
+    "main.ts",
+    "preload.ts"
+  ]
+}
