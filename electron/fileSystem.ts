@@ -41,40 +41,39 @@ const DEFAULT_DATA: Dashboard[] = [
     },
 ];
 
+
 const getSavePath = (): string => {
-    const userDataPath = app.getPath("userData");
+    // const savesDir = path.join(__dirname, "saves");
+    // const savePath = path.join(savesDir, "app-data.json");
 
-    if (!fs.existsSync(userDataPath)) {
-        fs.mkdirSync(userDataPath, { recursive: true });
-    }
+    // // Create saves/ directory if it doesn't exist
+    // if (!fs.existsSync(savesDir)) {
+    //     fs.mkdirSync(savesDir, { recursive: true });
+    // }
 
+    // // Create app-data.json if it doesn't exist
+    // if (!fs.existsSync(savePath)) {
+    //     console.log("creating ")
+    //     fs.writeFileSync(savePath, JSON.stringify(DEFAULT_DATA, null, 2));
+    // }
+
+    // return savePath;
     return path.join(__dirname, "saves/app-data.json");
 };
-
 const saveTasks = (
     dashboardData: Omit<Dashboard, "todo" | "progress" | "done" | "updatedAt">,
     columnData: DashboardColumnData
 ): boolean => {
+
+    console.log(dashboardData, columnData, "inside save task")
     try {
+        const savePath = getSavePath();
         let allDashboards: Dashboard[] = [];
 
-        const savePath = getSavePath();
-
-        if (fs.existsSync(savePath)) {
-            const fileData = fs.readFileSync(savePath, "utf8");
-            const parsed = JSON.parse(fileData);
-            if (!Array.isArray(parsed)) throw new Error("Invalid data format");
-            allDashboards = parsed;
-        }
-
-        if (
-            !columnData ||
-            !Array.isArray(columnData.todo) ||
-            !Array.isArray(columnData.progress) ||
-            !Array.isArray(columnData.done)
-        ) {
-            throw new Error("Invalid column data structure");
-        }
+        const fileData = fs.readFileSync(savePath, "utf8");
+        const parsed = JSON.parse(fileData);
+        if (!Array.isArray(parsed)) throw new Error("Invalid data format");
+        allDashboards = parsed;
 
         const dashboardIndex = allDashboards.findIndex(
             (d) => d.id === dashboardData.id
@@ -104,12 +103,6 @@ const saveTasks = (
 const loadTasks = (): Dashboard[] => {
     try {
         const savePath = getSavePath();
-
-        if (!fs.existsSync(savePath)) {
-            console.log("No tasks file found, returning defaults");
-            return DEFAULT_DATA;
-        }
-
         const data = fs.readFileSync(savePath, "utf8");
         const parsed = JSON.parse(data);
 
@@ -139,7 +132,13 @@ const loadTasks = (): Dashboard[] => {
 
 const saveDashboards = (dashboards: Dashboard[]): void => {
     const savePath = getSavePath();
-    fs.writeFileSync(savePath, JSON.stringify(dashboards, null, 2));
+    console.log("Attempting to write to file:", savePath);
+    try {
+        fs.writeFileSync(savePath, JSON.stringify(dashboards, null, 2));
+        console.log("File written successfully!");
+    } catch (error) {
+        console.error("Error writing to file:", error);
+    }
 };
 
 export { saveTasks, loadTasks, saveDashboards, Dashboard, Task };

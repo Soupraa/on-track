@@ -14,7 +14,7 @@ function createWindow() {
     // icon: path.join(__dirname, "icons/icon.png"),
     webPreferences: {
       nodeIntegration: false,
-      contextIsolation: false,
+      contextIsolation: true,
       webSecurity: false,
       preload: path.join(__dirname, "preload.js"),
     },
@@ -29,16 +29,17 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
 
     // Hot Reloading on 'node_modules/.bin/electronPath'
-    require('electron-reload')(__dirname, {
-      electron: path.join(__dirname,
-        '..',
-        '..',
-        'node_modules',
-        '.bin',
-        'electron' + (process.platform === "win32" ? ".cmd" : "")),
-      forceHardReset: true,
-      hardResetMethod: 'exit'
-    });
+  //   require('electron-reload')(__dirname, {
+  //     electron: path.join(__dirname,
+  //       '..',
+  //       '..',
+  //       'node_modules',
+  //       '.bin',
+  //       'electron' + (process.platform === "win32" ? ".cmd" : "")),
+  //     forceHardReset: true,
+  //     hardResetMethod: 'exit'
+  //   });
+  // }
   }
 }
 
@@ -64,6 +65,7 @@ app.whenReady().then(() => {
 });
 
 ipcMain.handle("load-tasks", async () => {
+  console.log("loading tasks")
   return loadTasks();
 });
 
