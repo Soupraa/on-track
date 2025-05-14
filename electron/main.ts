@@ -6,12 +6,12 @@ import { loadTasks, saveDashboards, saveTasks } from './fileSystem'
 let mainWindow;
 
 function createWindow() {
- mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1400,
     height: 1000,
     minHeight: 620,
     minWidth: 1000,
-    // icon: path.join(__dirname, "icons/icon.png"),
+    icon: path.join(__dirname, "icons/icon.png"),
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -29,17 +29,17 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
 
     // Hot Reloading on 'node_modules/.bin/electronPath'
-  //   require('electron-reload')(__dirname, {
-  //     electron: path.join(__dirname,
-  //       '..',
-  //       '..',
-  //       'node_modules',
-  //       '.bin',
-  //       'electron' + (process.platform === "win32" ? ".cmd" : "")),
-  //     forceHardReset: true,
-  //     hardResetMethod: 'exit'
-  //   });
-  // }
+    //   require('electron-reload')(__dirname, {
+    //     electron: path.join(__dirname,
+    //       '..',
+    //       '..',
+    //       'node_modules',
+    //       '.bin',
+    //       'electron' + (process.platform === "win32" ? ".cmd" : "")),
+    //     forceHardReset: true,
+    //     hardResetMethod: 'exit'
+    //   });
+    // }
   }
 }
 

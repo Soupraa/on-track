@@ -6,12 +6,12 @@ import useTaskStore, { Task } from "./useTaskStore";
 export interface Tag {
   id: string;
   name: string;
-  color?: string;
+  color: string;
 }
 
 interface TagStoreState {
   currentTags: Tag[];
-  tagIdToEdit: string | null;
+  tagIdToEdit: string;
 
   getDashboardTags: (dashboardId: string) => Promise<void>;
   addNewDashboardTag: (dashboardId: string | null, tagData: Tag) => Promise<void>;
@@ -39,7 +39,7 @@ const useTagStore = create<TagStoreState>((set, get) => {
 
   return {
     currentTags: [],
-    tagIdToEdit: null,
+    tagIdToEdit: "",
 
     getDashboardTags: async (dashboardId: string) => {
       const dashboards = await loadDashboardsFromDisk();

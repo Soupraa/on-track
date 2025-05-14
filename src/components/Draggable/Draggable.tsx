@@ -20,7 +20,7 @@ const DraggableContainer = styled.div<{ $isDragging: boolean }>`
   margin: 0.5rem;
   background-color: #fef3c6;
   border: 1px solid #00000022;
-  border-radius: 0.5rem;
+  border-radius: 0.1rem 0.1rem 0.5rem 0.5rem;
   font-family: Inter, sans-serif;
   color: black;
   overflow: visible;
@@ -62,6 +62,19 @@ const Tag = styled.div<{ color: string }>`
 const AnimatedChevronRight = styled(ChevronRight) <{ $isOpen: boolean }>`
     transform: ${({ $isOpen }) => $isOpen ? "rotate(90deg)" : ""};
       transition: transform 0.2s ease-in-out;
+`;
+
+const DraggableTitle = styled.h3`
+    font-family: 'Oswald', sans-serif; 
+    letter-spacing: 0.025rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    overflow-wrap: break-word;
+`;
+
+const DraggableBody = styled.div`
+    white-space: normal;
+    overflow-wrap: break-word;
 `;
 export default function Draggable({ children, onDragEnd, item }: DraggableProps) {
     const [isDragging, setIsDragging] = useState(false);
@@ -130,7 +143,11 @@ export default function Draggable({ children, onDragEnd, item }: DraggableProps)
                 disableGutters
                 elevation={0}
                 square
-                sx={{ background: "none", border: "none", boxShadow: "none" }}
+                sx={{
+                    background: "none", border: "none", boxShadow: "none", "&::before": {
+                        display: "none", padding: 0
+                    },
+                }}
             >
                 <AccordionSummary
                     id={`panel-${item.id}`}
@@ -140,20 +157,17 @@ export default function Draggable({ children, onDragEnd, item }: DraggableProps)
                         whiteSpace: "normal",
                         display: "block",
                         padding: 0,
-
+                        margin: 0,
                     }}
                 >
-                    <h3>
+                    <DraggableTitle>
                         {strike ? <s>{item.title}</s> : item.title}
-                    </h3>
+                    </DraggableTitle>
                 </AccordionSummary>
-                <AccordionDetails style={{ padding: 0 }} sx={{
-                    padding: 0,
-
-                }}>
-
-                    {strike ? <s>{children}</s> : children}
-
+                <AccordionDetails style={{ padding: 0 }}>
+                    <DraggableBody>
+                        {strike ? <s>{children}</s> : children}
+                    </DraggableBody>
                 </AccordionDetails>
             </Accordion>
 

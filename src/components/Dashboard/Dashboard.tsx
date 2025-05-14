@@ -4,15 +4,17 @@ import useTaskStore, { Task } from "../../store/useTaskStore";
 import useTagStore from "../../store/useTagStore";
 import Column from "../Column/Column";
 import Draggable from "../Draggable/Draggable";
+import Toolbar from "../Toolbar/Toolbar";
+import { COLOR } from "../../common/styles";
 
 interface DashboardProps {
     dashboardId: string;
 }
 
 const DashboardContainer = styled.div`
-  display: flex;
-  height: 100vh;
-  background: white;
+    display: flex;
+    height: 100vh;
+    background: ${COLOR.MAIN_BACKGROUND};
 `;
 
 const MainContent = styled.div`
@@ -39,7 +41,7 @@ export default function Dashboard({ dashboardId }: DashboardProps) {
 
     return (
         <DashboardContainer>
-            {/* <ToolBar tagsArr={currentTags} /> */}
+            <Toolbar tagsArr={currentTags} />
             <MainContent>
                 {columns && (
                     <>

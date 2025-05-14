@@ -43,22 +43,22 @@ const DEFAULT_DATA: Dashboard[] = [
 
 
 const getSavePath = (): string => {
-    // const savesDir = path.join(__dirname, "saves");
-    // const savePath = path.join(savesDir, "app-data.json");
+    const savesDir = path.join(__dirname, "saves");
+    const savePath = path.join(savesDir, "app-data.json");
 
-    // // Create saves/ directory if it doesn't exist
-    // if (!fs.existsSync(savesDir)) {
-    //     fs.mkdirSync(savesDir, { recursive: true });
-    // }
+    // Create saves/ directory if it doesn't exist
+    if (!fs.existsSync(savesDir)) {
+        fs.mkdirSync(savesDir, { recursive: true });
+    }
 
-    // // Create app-data.json if it doesn't exist
-    // if (!fs.existsSync(savePath)) {
-    //     console.log("creating ")
-    //     fs.writeFileSync(savePath, JSON.stringify(DEFAULT_DATA, null, 2));
-    // }
+    // Create app-data.json if it doesn't exist
+    if (!fs.existsSync(savePath)) {
+        console.log("creating ")
+        fs.writeFileSync(savePath, JSON.stringify(DEFAULT_DATA, null, 2));
+    }
 
-    // return savePath;
-    return path.join(__dirname, "saves/app-data.json");
+    return savePath;
+    // return path.join(__dirname, "saves/app-data.json");
 };
 const saveTasks = (
     dashboardData: Omit<Dashboard, "todo" | "progress" | "done" | "updatedAt">,

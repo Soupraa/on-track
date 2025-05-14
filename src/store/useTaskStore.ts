@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import useTagStore from "./useTagStore";
+import useTagStore, { Tag } from "./useTagStore";
 import { Dashboard } from "./useDashboardStore";
+import { v4 as uuidv4 } from 'uuid';
 
 export interface Task {
   id: string;
@@ -8,7 +9,7 @@ export interface Task {
   text?: string;
   strike?: boolean;
   isOpen?: boolean;
-  tags?: string[];
+  tags?: Tag[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -17,6 +18,7 @@ export interface DashboardColumnData {
   todo: Task[];
   progress: Task[];
   done: Task[];
+  [key: string]: any;
 }
 
 interface TaskStoreState {
@@ -41,9 +43,9 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
   storeDashboardId: null,
   storeDashboardTitle: null,
 
-  addTask: (columnId, updates) => {
+  addTask: (columnId, updates: any) => {
     const newTask: Task = {
-      id: Date.now().toString(),
+      id: uuidv4(),
       title: updates.title || "Untitled Task",
       text: updates.text || "",
       strike: false,
@@ -69,7 +71,7 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
       let wasUpdated = false;
 
       (Object.keys(newColumns) as (keyof DashboardColumnData)[]).forEach((columnId) => {
-        newColumns[columnId] = newColumns[columnId].map((item) => {
+        newColumns[columnId] = newColumns[columnId].map((item: Task) => {
           if (item.id === itemId) {
             wasUpdated = true;
             return {
@@ -100,7 +102,7 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
 
       // Remove from all columns
       (Object.keys(newColumns) as (keyof DashboardColumnData)[]).forEach((columnId) => {
-        newColumns[columnId] = newColumns[columnId].filter((item) => item.id !== itemId);
+        newColumns[columnId] = newColumns[columnId].filter((item: Task) => item.id !== itemId);
       });
 
       const allItems = Object.values(state.columns).flat();
@@ -122,7 +124,7 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
 
       (Object.keys(newColumns) as (keyof DashboardColumnData)[]).forEach((columnId) => {
         const originalLength = newColumns[columnId].length;
-        newColumns[columnId] = newColumns[columnId].filter((item) => item.id !== itemId);
+        newColumns[columnId] = newColumns[columnId].filter((item: Task) => item.id !== itemId);
         if (newColumns[columnId].length !== originalLength) {
           wasDeleted = true;
         }
