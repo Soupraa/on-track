@@ -4,6 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { EllipsisVertical } from "lucide-react";
 import useTagStore from "../../store/useTagStore";
 import styled from "styled-components";
+import { TYPOPGRAPHY } from "../../common/styles";
 
 const Button = styled.button`
     background: inherit;
@@ -17,6 +18,11 @@ const Button = styled.button`
 `;
 const TagMenuWrapper = styled.div`
     margin: auto;
+`;
+const P = styled.p`
+    margin: 0;
+    font-family: ${TYPOPGRAPHY.INTER};
+    font-size: 0.8rem;
 `;
 interface ITagMenu {
     tagId: string;
@@ -60,10 +66,10 @@ const TagMenu: React.FC<ITagMenu> = ({ tagId, setShowTagModal }) => {
                 disableScrollLock
             >
                 <MenuItem onClick={handleEdit}>
-                    <p className="font-inter text-sm">Edit</p>
+                    <P>Edit</P>
                 </MenuItem>
                 <MenuItem onClick={handleDelete}>
-                    <p className="font-inter text-sm">Delete</p>
+                    <P >Delete</P>
                 </MenuItem>
             </Menu>
         </TagMenuWrapper>

@@ -13,16 +13,14 @@ interface DashboardProps {
 
 const DashboardContainer = styled.div`
     display: flex;
-    height: 100vh;
+    height: 100%;
     background: ${COLOR.MAIN_BACKGROUND};
 `;
 
 const MainContent = styled.div`
   display: flex;
-  gap: 24px;
-  max-width: 1200px;
+  width: 100%;
   justify-content: center;
-  padding-top: 2rem;
   margin: 0 auto;
 `;
 
@@ -42,7 +40,7 @@ export default function Dashboard({ dashboardId }: DashboardProps) {
     return (
         <DashboardContainer>
             <Toolbar tagsArr={currentTags} />
-            <MainContent>
+            {/* <MainContent> */}
                 {columns && (
                     <>
                         <Column
@@ -85,7 +83,7 @@ export default function Dashboard({ dashboardId }: DashboardProps) {
                         </Column>
                     </>
                 )}
-            </MainContent>
+            {/* </MainContent> */}
         </DashboardContainer>
     );
 }

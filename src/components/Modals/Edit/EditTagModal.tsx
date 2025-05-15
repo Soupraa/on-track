@@ -84,7 +84,7 @@ const EditTagModal: React.FC<IEditTagModal> = ({ showModal, setShowModal }) => {
                 <Spacer $space="2rem" />
                 <ModalButtonGroup
                     leftLabel={"Close"}
-                    rightLabel={"Add"}
+                    rightLabel={"Update"}
                     closeModalFunc={handleClose}
                 />
             </Form>

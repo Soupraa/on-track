@@ -22,7 +22,7 @@ export const Button = styled.button<{ color: "red" | "green" }>`
   font-weight: 400;
   font-style: normal;
   font-size: 1.2rem;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.025em;
   transition: background-color 0.3s ease;
   cursor: pointer;
 

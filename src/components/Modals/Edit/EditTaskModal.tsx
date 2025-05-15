@@ -1,45 +1,45 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { ErrorText, Form, FormDropdown, FormItem, Input, Label, ModalTitle, NewTaskButton, TextArea } from "../Modal.styles";
 import ModalWrapper from "../../ModalWrapper/ModalWrapper";
-import { ErrorText, Form, FormDropdown, FormItem, Input, Label, ModalTitle, NewTaskButton, TextArea, Option } from "../Modal.styles";
-import { isValidLength } from "../../../common/helpers";
 import ModalButtonGroup from "../../ModalButtonGroup/ModalButtonGroup";
-import { Spacer } from "../../../common/styles";
-import { COLUMNS } from "../../../common/constants";
-import useTaskStore from "../../../store/useTaskStore";
 import { TagSelector } from "../../TagSelector/TagSelector";
-import useTagStore, { Tag } from "../../../store/useTagStore";
+import useTaskStore, { Task } from "../../../store/useTaskStore";
+import { isValidLength } from "../../../common/helpers";
+import useTagStore from "../../../store/useTagStore";
+import { Spacer } from "../../../common/styles";
+import { Settings2 } from "lucide-react";
+import { DraggableButton } from "../../Draggable/Draggable";
+import { Tooltip } from "@mui/material";
 
-export default function AddNewTaskModal() {
-    const [open, setOpen] = useState(false);
-    const [title, setTitle] = useState("");
-    const [titleError, setTitleError] = useState("");
-    const [description, setDescription] = useState("");
-    const [descriptionError, setDescriptionError] = useState("");
-    const [activeColumn, setActiveColumn] = useState(COLUMNS.TODO);
-    const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+const EditTaskModal: React.FC<{ task: Task }> = ({ task }) => {
+    const [open, setOpen] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>(task.title);
+    const [description, setDescription] = useState<string | undefined>(task.text);
+    const [selectedTags, setSelectedTags] = useState(task.tags || []);
+    const [titleError, setTitleError] = useState<string>("");
+    const [descriptionError, setDescriptionError] = useState<string>("");
 
-    const { addTask } = useTaskStore();
+    const { updateTask } = useTaskStore();
     const { currentTags } = useTagStore();
 
-
     const handleOpen = () => {
-        setTitle("");
+        setTitle(task.title);
         setTitleError("");
-        setDescription("");
+        setDescription(task.text);
         setDescriptionError("");
-        setSelectedTags([]);
+        setSelectedTags(task.tags || []);
         setOpen(true);
 
     }
     const handleClose = () => {
-        setTitle("");
+        setTitle(task.title);
         setTitleError("");
-        setDescription("");
+        setDescription(task.text);
         setDescriptionError("");
-        setSelectedTags([]);
+        setSelectedTags(task.tags || []);
         setOpen(false);
     }
-    const handleSubmit = async (e: any) => {    
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
         if (!title.trim()) {
             setTitleError("Name is required.");
@@ -53,8 +53,8 @@ export default function AddNewTaskModal() {
             setDescriptionError("Description cannot exceed 500 character limit.");
             return;
         }
-        addTask(activeColumn, {
-            title: title,
+        await updateTask(task.id, {
+            title,
             text: description,
             tags: selectedTags,
         });
@@ -62,13 +62,15 @@ export default function AddNewTaskModal() {
     }
     return (
         <>
-            <NewTaskButton
-                onClick={handleOpen}
-            >
-                New Task
-            </NewTaskButton>
+            <Tooltip title={"Edit"} placement="top">
+                <DraggableButton
+                    onClick={handleOpen}
+                >
+                    <Settings2 />
+                </DraggableButton>
+            </Tooltip>
             <ModalWrapper setIsOpen={setOpen} isOpen={open}>
-                <ModalTitle>Add a new task</ModalTitle>
+                <ModalTitle>Update tag</ModalTitle>
                 <Form onSubmit={handleSubmit}>
                     <FormItem>
                         <Label>Name</Label>
@@ -91,7 +93,7 @@ export default function AddNewTaskModal() {
                         />
                         {descriptionError && <ErrorText>{descriptionError}</ErrorText>}
                     </FormItem>
-                    <FormItem>
+                    {/* <FormItem>
                         <Label>Status</Label>
                         <FormDropdown
                             value={activeColumn}
@@ -103,7 +105,7 @@ export default function AddNewTaskModal() {
                             <Option value="done">Done</Option>
                         </FormDropdown>
 
-                    </FormItem>
+                    </FormItem> */}
                     <Label>Tags</Label>
                     <TagSelector
                         availableTags={currentTags}
@@ -113,7 +115,7 @@ export default function AddNewTaskModal() {
                     <Spacer $space={"2rem"} />
                     <ModalButtonGroup
                         leftLabel={"Close"}
-                        rightLabel={"Add"}
+                        rightLabel={"Update"}
                         closeModalFunc={handleClose}
                     />
                 </Form>
@@ -121,3 +123,4 @@ export default function AddNewTaskModal() {
         </>
     )
 }
+export default EditTaskModal;

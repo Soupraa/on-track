@@ -3,16 +3,16 @@ import styled from "styled-components";
 import { Tag } from "../../store/useTagStore";
 import AddNewTaskModal from "../Modals/Add/AddNewTaskModal";
 import AddNewTagModal from "../Modals/Add/AddNewTagModal";
-import { TYPOPGRAPHY } from "../../common/styles";
+import { COLOR, TYPOPGRAPHY } from "../../common/styles";
 import TagMenu from "../TagMenu/TagMenu";
 import EditTagModal from "../Modals/Edit/EditTagModal";
 
 const ToolbarContainer = styled.div`
     width: 150px;
-    height: 100vh;
+    min-height: 100vh;
     padding: 1rem;
     background: #inherit;
-    border-right: 2px solid #272727;
+    border-right: 0.5px solid ${COLOR.BORDER_COLOR};
     min-width: 100px;
     padding-top: 2rem;
 `;

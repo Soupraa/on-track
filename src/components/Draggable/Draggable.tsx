@@ -4,7 +4,9 @@ import useTaskStore, { Task } from "../../store/useTaskStore";
 // import EditItemModal from "./modals/EditItemModal";
 import { Accordion, AccordionDetails, AccordionSummary, Tooltip } from "@mui/material";
 import styled from "styled-components";
-import { FlexEnd, FlexStart } from "../../common/styles";
+import { COLOR, FlexEnd, FlexStart } from "../../common/styles";
+import { Tag } from "../../store/useTagStore";
+import EditTaskModal from "../Modals/Edit/EditTaskModal";
 // import type { Task } from "../types/task"; // Adjust the path to your Task type
 // import { Tag } from "../../store/useTagStore";
 
@@ -39,7 +41,7 @@ const Header = styled.div`
   display: flex;
 `;
 
-const Button = styled.button`
+export const DraggableButton = styled.button<{ type?: string }>`
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     color: inherit;
@@ -47,11 +49,11 @@ const Button = styled.button`
     background: none;
     width: fit-content;
     &:hover {
-        color: #ef4444;
+        color: ${({type}) => type === 'delete' ? "#ef4444" : "#99a1af"};
     }
 `;
 
-const Tag = styled.div<{ color: string }>`
+const TagContainer = styled.div<{ color: string }>`
   background-color: ${({ color }) => color};
   padding: 0.25rem;
   margin: 0.125rem 0.25rem 0 0;
@@ -70,11 +72,21 @@ const DraggableTitle = styled.h3`
     font-size: 1.25rem;
     font-weight: 500;
     overflow-wrap: break-word;
+    margin: 0;
+    span {
+        margin: 0;
+    }
 `;
 
 const DraggableBody = styled.div`
     white-space: normal;
     overflow-wrap: break-word;
+`;
+const DraggableTags = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
 `;
 export default function Draggable({ children, onDragEnd, item }: DraggableProps) {
     const [isDragging, setIsDragging] = useState(false);
@@ -118,28 +130,27 @@ export default function Draggable({ children, onDragEnd, item }: DraggableProps)
             <Header>
                 <FlexStart>
                     <Tooltip title={isOpen ? "Collapse" : "Expand"} placement="top">
-                        <Button onClick={handleCollapse}>
+                        <DraggableButton onClick={handleCollapse}>
                             <AnimatedChevronRight $isOpen={isOpen} />
-                        </Button>
+                        </DraggableButton>
                     </Tooltip>
                 </FlexStart>
                 <FlexEnd>
                     <Tooltip title="Strike" placement="top">
-                        <Button onClick={handleStrike}>
+                        <DraggableButton onClick={handleStrike}>
                             <Strikethrough className="w-5" />
-                        </Button>
+                        </DraggableButton>
                     </Tooltip>
-                    {/* <EditItemModal item={item} /> */}
+                    <EditTaskModal task={item} />
                     <Tooltip title="Delete" placement="top">
-                        <Button onClick={handleDelete}>
+                        <DraggableButton onClick={handleDelete} type="delete">
                             <X className="w-5" />
-                        </Button>
+                        </DraggableButton>
                     </Tooltip>
                 </FlexEnd>
             </Header>
             <Accordion
                 expanded={isOpen}
-                onChange={handleCollapse}
                 disableGutters
                 elevation={0}
                 square
@@ -156,28 +167,32 @@ export default function Draggable({ children, onDragEnd, item }: DraggableProps)
                         wordBreak: "break-word",
                         whiteSpace: "normal",
                         display: "block",
-                        padding: 0,
+                        padding: "0.25rem 0",
                         margin: 0,
+                        pointerEvents: "none",
+                        "& .MuiAccordionSummary-content": {
+                            margin: 0,
+                        },
                     }}
                 >
                     <DraggableTitle>
                         {strike ? <s>{item.title}</s> : item.title}
                     </DraggableTitle>
                 </AccordionSummary>
-                <AccordionDetails style={{ padding: 0 }}>
+                <AccordionDetails style={{ padding: 0, margin: 0 }}>
                     <DraggableBody>
                         {strike ? <s>{children}</s> : children}
                     </DraggableBody>
                 </AccordionDetails>
             </Accordion>
 
-            {/* <div className="mt-2 gap-1 flex flex-wrap">
-        {item.tags?.map((t: Tag, k: number) => (
-          <Tag key={k} color={t.color}>
-            {t.title}
-          </Tag>
-        ))}
-      </div> */}
+            <DraggableTags className="mt-2 gap-1 flex flex-wrap">
+                {item.tags?.map((t: Tag, k: number) => (
+                    <TagContainer key={k} color={t.color}>
+                        {t.name}
+                    </TagContainer>
+                ))}
+            </DraggableTags>
         </DraggableContainer>
     );
 }

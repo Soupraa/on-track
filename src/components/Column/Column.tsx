@@ -13,19 +13,22 @@ interface ColumnProps {
 const ColumnWrapper = styled.div<{ $isActive: boolean }>`
   display: flex;
   flex-direction: column;
-  padding: 0.2rem 1rem;
-  border-radius: 0.5rem;
-  max-width: 18rem;
-  min-width: 14rem;
-  min-height: 65%;
-  height: fit-content;
-  background-color: ${({ $isActive }) => ($isActive ? "#1a1a1a" : COLOR.MAIN_BACKGROUND)};
-  border: 1px solid ${({ $isActive }) => ($isActive ? "#1a1a1a" : "#272727")};
+  min-height: 100%;
+  height: 100%vh;
+  padding-inline: 0.5rem;
+  padding-top: 0.5rem;
+  flex: 1; 
+  max-width: 50%; 
+  min-width: 0;
+  background-color: ${({ $isActive }) =>
+        $isActive ? "#1a1a1a" : COLOR.MAIN_BACKGROUND};
+  border-right: 1px solid ${({ $isActive }) =>
+        $isActive ? "#1a1a1a" : COLOR.BORDER_COLOR};
   transition: all 0.3s ease;
 `;
 
 const Title = styled.h2<{ $isActive: boolean }>`
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   text-align: center;
   font-size: 1.875rem;
   font-family: ${TYPOPGRAPHY.SQUADA_ONE};

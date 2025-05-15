@@ -40,7 +40,7 @@ const DashboardNavigator: React.FC = () => {
     }, []);
     return (
         <TopbarContainer>
-            <Spacer $space={"2rem"}/>
+            <Spacer $space={"2rem"} />
             <DashboardList>
                 {dashboards.map((d) => (
                     <DashboardButton
@@ -60,9 +60,7 @@ const DashboardNavigator: React.FC = () => {
 
             </DashboardList>
             {currentDashboardId && dashboards.length > 0 && (
-                <div className="h-dvh">
-                    <Dashboard dashboardId={currentDashboardId} />
-                </div>
+                <Dashboard dashboardId={currentDashboardId} />
             )}
         </TopbarContainer>
     )

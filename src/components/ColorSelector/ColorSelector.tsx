@@ -65,8 +65,6 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ selected, setSelec
                     />
                 ))}
             </Grid>
-
-            {/* Optional hidden input for form submission */}
             {name && <HiddenInput type="hidden" name={name} value={selected || ""} />}
         </Wrapper>
     );

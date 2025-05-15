@@ -3,7 +3,7 @@ import { COLOR, TYPOPGRAPHY } from "../../common/styles";
 
 export const TopbarContainer = styled.div`
   width: 100%;
-  background-color: ${COLOR.SECONDARY_BACKGROUND};
+  background-color: ${COLOR.MAIN_BACKGROUND};
 `;
 
 export const Title = styled.h1`
@@ -18,7 +18,7 @@ export const DashboardList = styled.div`
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-
+  border-bottom: 1px solid ${COLOR.BORDER_COLOR};
   &::-webkit-scrollbar {
     display: none;
   }

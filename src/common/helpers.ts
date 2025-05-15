@@ -1,4 +1,4 @@
-export const isValidLength = (s: string, length: number) => {
+export const isValidLength = (s: any, length: number) => {
     if (s.length > length) {
         return false;
     }

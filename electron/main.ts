@@ -11,6 +11,8 @@ function createWindow() {
     height: 1000,
     minHeight: 620,
     minWidth: 1000,
+    resizable: true,
+    autoHideMenuBar: true,
     icon: path.join(__dirname, "icons/icon.png"),
     webPreferences: {
       nodeIntegration: false,
