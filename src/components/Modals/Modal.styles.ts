@@ -30,33 +30,32 @@ export const Label = styled.label`
     letter-spacing: 0.05em; 
 `;
 export const Input = styled.input`
-  background-color: #f1f5f9;
-  border-radius: ${FORM_STYLES.BORDER_RADIUS}; 
-  margin-top: 0.5rem;
-  height: 2.5rem;
-  border: none;
-  outline: none;
-  padding-inline: 0.75rem;
-  font-family: inherit;
+    background-color: #f1f5f9;
+    border-radius: ${FORM_STYLES.BORDER_RADIUS}; 
+    margin-top: 0.5rem;
+    height: 2.5rem;
+    border: none;
+    outline: none;
+    padding-inline: 0.75rem;
+    font-family: inherit;
 `;
 export const TextArea = styled.textarea`
     background-color: #f1f5f9;
     border-radius: ${FORM_STYLES.BORDER_RADIUS};
     margin-top: 0.5rem;
-    height: 2.5rem;
     border: none;
     outline: none;
     padding: 0.75rem;
     font-family: inherit;
     max-width: 100%;
     resize: vertical;
-    max-height: 400px;
+    max-height: 200px;
     min-height: 100px;
 `;
 export const ErrorText = styled.p`
-  color: #ef4444;
-  font-size: 0.875rem; 
-  margin: 0.5rem 0; 
+    color: #ef4444;
+    font-size: 0.875rem; 
+    margin: 0.5rem 0; 
 `;
 
 export const NewTaskButton = styled.button`
@@ -72,7 +71,7 @@ export const NewTaskButton = styled.button`
     cursor: pointer;
     font-weight: 500;
     transition: all 0.2s ease-in-out;
-        letter-spacing: 0.025rem;
+    letter-spacing: 0.025rem;
 
     &:hover {
         background: rgb(220, 234, 255);

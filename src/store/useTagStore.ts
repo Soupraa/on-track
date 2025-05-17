@@ -1,8 +1,7 @@
 import { create } from "zustand";
 import useDashboardStore, { Dashboard } from "./useDashboardStore";
-import useTaskStore, { Task } from "./useTaskStore";
+import useTaskStore from "./useTaskStore";
 
-// Types
 export interface Tag {
   id: string;
   name: string;

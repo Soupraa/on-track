@@ -18,28 +18,11 @@ interface Dashboard {
     id: string;
     title: string;
     tags: string[];
-    todo: Task[];
-    progress: Task[];
-    done: Task[];
+    columns: DashboardColumnData;
     updatedAt?: string;
 }
 
-const DEFAULT_DATA: Dashboard[] = [
-    {
-        id: "defaultId",
-        title: "dashboard",
-        tags: [],
-        todo: [
-            {
-                id: "welcome",
-                title: "Welcome to OnTrack",
-                text: "Start creating tasks and tags, happy tasking :)",
-            },
-        ],
-        progress: [],
-        done: [],
-    },
-];
+const DEFAULT_DATA: Dashboard[] = [];
 
 
 const getSavePath = (): string => {
@@ -78,7 +61,9 @@ const saveTasks = (
 
         const updatedDashboard: Dashboard = {
             ...dashboardData,
-            ...columnData,
+            columns: {
+                ...columnData,
+            },
             updatedAt: new Date().toISOString(),
         };
 
@@ -111,9 +96,9 @@ const loadTasks = (): Dashboard[] => {
                     item !== null &&
                     typeof item.id === "string" &&
                     typeof item.title === "string" &&
-                    Array.isArray(item.todo) &&
-                    Array.isArray(item.progress) &&
-                    Array.isArray(item.done)
+                    Array.isArray(item.columns.todo) &&
+                    Array.isArray(item.columns.progress) &&
+                    Array.isArray(item.columns.done)
             )
         ) {
             return parsed as Dashboard[];

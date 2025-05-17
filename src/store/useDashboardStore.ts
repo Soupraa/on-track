@@ -6,13 +6,15 @@ export interface Dashboard {
     id: string;
     title: string;
     tags: Tag[];
-    todo: Task[];
-    progress: Task[];
-    done: Task[];
+    columns: DashboardColumns;
     createdAt?: string;
     updatedAt?: string;
 }
-
+export interface DashboardColumns {
+    todo: Task[];
+    progress: Task[];
+    done: Task[];
+}
 interface DashboardState {
     currentDashboardId: string;
     dashboards: Dashboard[];
@@ -20,7 +22,6 @@ interface DashboardState {
 
     initializeDashboards: () => Promise<boolean>;
     setActiveDashboard: (dashboardId: string) => void;
-    saveDashboards: () => Promise<void>;
     editExistingDashboard: (dashboardId: string, newTitle: string) => Promise<void>;
     setDashboardToEdit: (dashboardId: string) => void;
     addNewDashboard: (dashboardName: string) => Promise<void>;
@@ -61,9 +62,7 @@ const useDashboardStore = create<DashboardState>((set, get) => {
                     id: d.id,
                     title: d.title,
                     tags: d.tags,
-                    todo: d.todo,
-                    progress: d.progress,
-                    done: d.done,
+                    columns: d.columns,
                     updatedAt: d.updatedAt,
                     createdAt: d.createdAt,
                 })),
@@ -74,10 +73,6 @@ const useDashboardStore = create<DashboardState>((set, get) => {
 
         setActiveDashboard: (dashboardId: string) => {
             set({ currentDashboardId: dashboardId });
-        },
-
-        saveDashboards: async () => {
-            await persistDashboards(get().dashboards);
         },
 
         editExistingDashboard: async (dashboardId: string, newTitle: string) => {
@@ -102,9 +97,11 @@ const useDashboardStore = create<DashboardState>((set, get) => {
                 id: Date.now().toString(),
                 title: dashboardName,
                 tags: [],
-                todo: [],
-                progress: [],
-                done: [],
+                columns: {
+                    todo: [],
+                    progress: [],
+                    done: []
+                },
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
             };
@@ -127,7 +124,20 @@ const useDashboardStore = create<DashboardState>((set, get) => {
         },
         getDashboardById: (dashboardId: string) => {
             return get().dashboards.find((d) => d.id === dashboardId);
-            
+        },
+        clearColumnById: async (columnId: string) => {
+            const dashboards = await loadDashboardsFromDisk();
+
+            const currentDashboard: any = dashboards.find((d: Dashboard) => d.id === get().currentDashboardId);
+
+            console.log(currentDashboard);
+            if (!currentDashboard) {
+                console.warn("No current dashboard found.");
+                return;
+            }
+            currentDashboard[columnId] = [];
+
+            console.log(currentDashboard)
         }
     };
 });

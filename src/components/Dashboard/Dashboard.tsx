@@ -27,7 +27,7 @@ export default function Dashboard({ dashboardId }: DashboardProps) {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [fromColumnId, setFromColumnId] = useState<string>("");
     const [fromIndex, setFormIndex] = useState<number | null>(null);
-
+    const finalColumns = [{ id: "todo", title: "To Do" }, { id: "progress", title: "In progress" }, { id: "done", title: "Done" }];
     useEffect(() => {
         loadTasksByDashboardId(dashboardId);
         getDashboardTags(dashboardId);
@@ -40,59 +40,26 @@ export default function Dashboard({ dashboardId }: DashboardProps) {
     return (
         <DashboardContainer>
             <Toolbar tagsArr={currentTags} />
-            {columns && (
-                <>
+            {columns && finalColumns.map((fc: any, k: number) => {
+                return (
                     <Column
-                        columnId="todo"
-                        title="To Do"
-                        count={columns.todo.length}
+                        key={k}
+                        columnId={fc.id}
+                        title={fc.title}
+                        count={columns[fc.id].length}
                         hoverIndex={hoveredIndex}
                         fromColumnId={fromColumnId}
                         fromIndex={fromIndex}
                         setHoverIndex={setHoveredIndex}
-
                     >
-                        {columns.todo.map((item: Task, index: number) => (
-                            <Draggable key={item.id} item={item} onDragOver={handleDragOver} index={index} hoverIndex={hoveredIndex} currentColumnId={"todo"} setFromColumnId={setFromColumnId} setFromIndex={setFormIndex}>
+                        {columns[fc.id].map((item: Task, index: number) => (
+                            <Draggable key={item.id} item={item} onDragOver={handleDragOver} index={index} hoverIndex={hoveredIndex} currentColumnId={fc.id} setFromColumnId={setFromColumnId} setFromIndex={setFormIndex}>
                                 <ParagraphStyle>{item.text}</ParagraphStyle>
                             </Draggable>
                         ))}
                     </Column>
-
-                    <Column
-                        columnId="progress"
-                        title="In Progress"
-                        count={columns.progress.length}
-                        hoverIndex={hoveredIndex}
-                        fromColumnId={fromColumnId}
-                        fromIndex={fromIndex}
-                        setHoverIndex={setHoveredIndex}
-
-                    >
-                        {columns.progress.map((item: Task, index: number) => (
-                            <Draggable key={item.id} item={item} onDragOver={handleDragOver} index={index} hoverIndex={hoveredIndex} currentColumnId={"progress"} setFromColumnId={setFromColumnId} setFromIndex={setFormIndex}>
-                                <ParagraphStyle>{item.text}</ParagraphStyle>
-                            </Draggable>
-                        ))}
-                    </Column>
-
-                    <Column
-                        columnId="done"
-                        title="Done"
-                        count={columns.done.length}
-                        hoverIndex={hoveredIndex}
-                        fromColumnId={fromColumnId}
-                        fromIndex={fromIndex}
-                        setHoverIndex={setHoveredIndex}
-
-                    >
-                        {columns.done.map((item: Task, index: number) => (
-                            <Draggable key={item.id} item={item} onDragOver={handleDragOver} index={index} hoverIndex={hoveredIndex} currentColumnId={"done"} setFromColumnId={setFromColumnId} setFromIndex={setFormIndex}>
-                                <ParagraphStyle>{item.text}</ParagraphStyle>
-                            </Draggable>
-                        ))}
-                    </Column>
-                </>
+                )
+            }
             )}
         </DashboardContainer>
     );

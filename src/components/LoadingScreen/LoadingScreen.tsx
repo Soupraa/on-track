@@ -16,7 +16,6 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
 `;
 interface ILoadingScreen {
     loading: boolean;
@@ -29,7 +28,7 @@ const LoadingScreen: React.FC<ILoadingScreen> = ({ loading, onFinish }) => {
     useEffect(() => {
         const interval = setInterval(() => {
             setProgress(prev => Math.min(prev + Math.floor(Math.random() * 10), 100));
-        }, 130);
+        }, 50);
         return () => clearInterval(interval);
     }, []);
 

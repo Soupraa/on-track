@@ -18,7 +18,7 @@ const ColumnWrapper = styled.div<{ $isActive: boolean }>`
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  height: 100%vh;
+  height: 100vh;
   padding-inline: 0.5rem;
   padding-top: 0.5rem;
   flex: 1; 
@@ -52,6 +52,26 @@ const TaskContainer = styled.div`
   flex-direction: column;
 `;
 
+const Toolbar = styled.div`
+    display: flex;
+    flex-direction: row;
+    border-bottom: 0.5px solid ${COLOR.BORDER_COLOR};
+`;
+const ToolbarItem = styled.button`
+    width: 100%;
+    border: none;
+    background: inherit;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    font-family: ${TYPOPGRAPHY.OSWALD};
+    font-size: 1rem;
+    letter-spacing: 0.025rem;
+    &:hover {
+        background: rgb(220, 234, 255);
+        color: inherit;
+    }
+`;
 export default function Column({ columnId, title, children, count, hoverIndex, fromColumnId, fromIndex, setHoverIndex }: ColumnProps) {
     const [isActive, setIsActive] = useState(false);
     const { moveTaskToIndex } = useTaskStore();
@@ -85,6 +105,9 @@ export default function Column({ columnId, title, children, count, hoverIndex, f
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
         >
+            {/* <Toolbar>
+                <ToolbarItem>Clear tasks</ToolbarItem>
+            </Toolbar> */}
             <Title $isActive={isActive}>
                 {title}: {count}
             </Title>

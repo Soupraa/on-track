@@ -151,9 +151,9 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
         storeDashboardId: id,
         storeDashboardTitle: dashboard.title,
         columns: {
-          todo: dashboard.todo || [],
-          progress: dashboard.progress || [],
-          done: dashboard.done || [],
+          todo: dashboard.columns.todo || [],
+          progress: dashboard.columns.progress || [],
+          done: dashboard.columns.done || [],
         },
       });
     }

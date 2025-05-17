@@ -93,19 +93,6 @@ const EditTaskModal: React.FC<{ task: Task }> = ({ task }) => {
                         />
                         {descriptionError && <ErrorText>{descriptionError}</ErrorText>}
                     </FormItem>
-                    {/* <FormItem>
-                        <Label>Status</Label>
-                        <FormDropdown
-                            value={activeColumn}
-                            onChange={(e) => setActiveColumn(e.target.value)}
-                            className="p-2 border rounded-xl w-full bg-slate-100 mt-2 text-black cursor-pointer"
-                        >
-                            <Option value="todo">To Do</Option>
-                            <Option value="progress">In Progress</Option>
-                            <Option value="done">Done</Option>
-                        </FormDropdown>
-
-                    </FormItem> */}
                     <Label>Tags</Label>
                     <TagSelector
                         availableTags={currentTags}
