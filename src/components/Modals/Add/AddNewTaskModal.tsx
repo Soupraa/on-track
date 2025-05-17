@@ -65,7 +65,7 @@ export default function AddNewTaskModal() {
             <NewTaskButton
                 onClick={handleOpen}
             >
-                New Task
+                Add task
             </NewTaskButton>
             <ModalWrapper setIsOpen={setOpen} isOpen={open}>
                 <ModalTitle>Add a new task</ModalTitle>

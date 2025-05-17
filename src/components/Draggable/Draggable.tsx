@@ -1,22 +1,26 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { ChevronRight, Strikethrough, X } from "lucide-react";
 import useTaskStore, { Task } from "../../store/useTaskStore";
-// import EditItemModal from "./modals/EditItemModal";
 import { Accordion, AccordionDetails, AccordionSummary, Tooltip } from "@mui/material";
 import styled from "styled-components";
-import { COLOR, FlexEnd, FlexStart } from "../../common/styles";
+import { FlexEnd, FlexStart } from "../../common/styles";
 import { Tag } from "../../store/useTagStore";
 import EditTaskModal from "../Modals/Edit/EditTaskModal";
-// import type { Task } from "../types/task"; // Adjust the path to your Task type
-// import { Tag } from "../../store/useTagStore";
+
 
 interface DraggableProps {
     children: React.ReactNode;
     onDragEnd?: () => void;
+    index: number;
+    onDragOver: (index: number) => void;
     item: Task;
+    currentColumnId: string;
+    setFromColumnId: (toColumnId: string) => void;
+    setFromIndex: (index: number) => void;
+    hoverIndex: number | null;
 }
 
-const DraggableContainer = styled.div<{ $isDragging: boolean }>`
+const DraggableContainer = styled.div<{ $isDragging: boolean; $isHovered: boolean }>`
   cursor: grab;
   padding: 0.5rem;
   margin: 0.5rem;
@@ -35,6 +39,9 @@ const DraggableContainer = styled.div<{ $isDragging: boolean }>`
   transform: ${({ $isDragging }) => ($isDragging ? "scale(1.02)" : "scale(1)")};
   transition: all 0.2s ease;
   opacity: ${({ $isDragging }) => ($isDragging ? 0.9 : 1)};
+
+    border-top: ${({ $isHovered }) => ($isHovered ? "4px solid #3b82f6" : "1px solid #00000022")};
+  margin-top: ${({ $isHovered }) => ($isHovered ? "0.25rem" : "0.5rem")};
 `;
 
 const Header = styled.div`
@@ -49,7 +56,7 @@ export const DraggableButton = styled.button<{ type?: string }>`
     background: none;
     width: fit-content;
     &:hover {
-        color: ${({type}) => type === 'delete' ? "#ef4444" : "#99a1af"};
+        color: ${({ type }) => type === 'delete' ? "#ef4444" : "#99a1af"};
     }
 `;
 
@@ -69,7 +76,7 @@ const AnimatedChevronRight = styled(ChevronRight) <{ $isOpen: boolean }>`
 const DraggableTitle = styled.h3`
     font-family: 'Oswald', sans-serif; 
     letter-spacing: 0.025rem;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 500;
     overflow-wrap: break-word;
     margin: 0;
@@ -88,19 +95,27 @@ const DraggableTags = styled.div`
     gap: 0.25rem;
     margin-top: 0.5rem;
 `;
-export default function Draggable({ children, onDragEnd, item }: DraggableProps) {
+export default function Draggable({ children, onDragEnd, item, onDragOver, index, currentColumnId, setFromColumnId, setFromIndex, hoverIndex }: DraggableProps) {
     const [isDragging, setIsDragging] = useState(false);
     const strike = item.strike;
     const isOpen = item.isOpen ?? true;
-    const menuRef = useRef(null);
-    const buttonRef = useRef(null);
     const { deleteTask, updateTask } = useTaskStore();
 
     const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+        setFromIndex(index);
+        setFromColumnId(currentColumnId);
+
         e.dataTransfer.setData("text/plain", item.id);
         e.dataTransfer.effectAllowed = "move";
         setIsDragging(true);
         setTimeout(() => e.dataTransfer.setDragImage(new Image(), 0, 0), 0);
+    };
+
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        if (onDragOver) {
+            onDragOver(index);
+        }
     };
 
     const handleDragEnd = () => {
@@ -119,13 +134,14 @@ export default function Draggable({ children, onDragEnd, item }: DraggableProps)
     const handleCollapse = async () => {
         await updateTask(item.id, { isOpen: !isOpen });
     };
-
     return (
         <DraggableContainer
             draggable
             onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
             onDragEnd={handleDragEnd}
             $isDragging={isDragging}
+            $isHovered={false}
         >
             <Header>
                 <FlexStart>

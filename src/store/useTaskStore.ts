@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import useTagStore, { Tag } from "./useTagStore";
-import { Dashboard } from "./useDashboardStore";
 import { v4 as uuidv4 } from 'uuid';
 
 export interface Task {
@@ -28,10 +27,16 @@ interface TaskStoreState {
 
   addTask: (columnId: keyof DashboardColumnData, updates: Partial<Task>) => void;
   updateTask: (itemId: string, updates: Partial<Task>) => void;
-  moveTask: (itemId: string, targetColumn: keyof DashboardColumnData) => void;
   deleteTask: (itemId: string) => void;
   saveTasks: (newColumns?: DashboardColumnData) => Promise<void>;
   loadTasksByDashboardId: (id: string) => Promise<void>;
+  moveTaskToIndex: (
+    itemId: string,
+    fromColumnId: string,
+    columnId: string,
+    fromIndex: number,
+    toIndex: number
+  ) => void;
 }
 
 const useTaskStore = create<TaskStoreState>((set, get) => ({
@@ -95,28 +100,6 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
       return state;
     });
   },
-
-  moveTask: (itemId, targetColumn) => {
-    set((state) => {
-      const newColumns: DashboardColumnData = { ...state.columns };
-
-      // Remove from all columns
-      (Object.keys(newColumns) as (keyof DashboardColumnData)[]).forEach((columnId) => {
-        newColumns[columnId] = newColumns[columnId].filter((item: Task) => item.id !== itemId);
-      });
-
-      const allItems = Object.values(state.columns).flat();
-      const movedItem = allItems.find((item) => item.id === itemId);
-
-      if (movedItem) {
-        newColumns[targetColumn] = [...newColumns[targetColumn], movedItem];
-      }
-
-      get().saveTasks(newColumns);
-      return { columns: newColumns };
-    });
-  },
-
   deleteTask: (itemId) => {
     set((state) => {
       const newColumns: DashboardColumnData = { ...state.columns };
@@ -175,6 +158,35 @@ const useTaskStore = create<TaskStoreState>((set, get) => ({
       });
     }
   },
+  moveTaskToIndex: (itemId, fromColumnId, toColumnId, fromIndex, toIndex) => {
+    set((state) => {
+      const newColumns = { ...state.columns };
+      const fromTasks = [...newColumns[fromColumnId]];
+      const toTasks = fromColumnId === toColumnId ? fromTasks : [...newColumns[toColumnId]];
+
+      const taskAtIndex = fromTasks[fromIndex];
+      if (!taskAtIndex || taskAtIndex.id !== itemId) {
+        console.warn("Item mismatch at fromIndex");
+        return state;
+      }
+
+      const [movedTask] = fromTasks.splice(fromIndex, 1);
+
+      toTasks.splice(toIndex, 0, movedTask);
+
+      newColumns[fromColumnId] = fromTasks;
+      if (fromColumnId === toColumnId) {
+        newColumns[toColumnId] = toTasks;
+      } else {
+        newColumns[toColumnId] = toTasks;
+      }
+
+      get().saveTasks(newColumns);
+      return { columns: newColumns };
+    });
+  }
+
+
 }));
 
 export default useTaskStore;

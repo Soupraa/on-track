@@ -3,18 +3,20 @@ import styled from "styled-components";
 import { Tag } from "../../store/useTagStore";
 import AddNewTaskModal from "../Modals/Add/AddNewTaskModal";
 import AddNewTagModal from "../Modals/Add/AddNewTagModal";
-import { COLOR, TYPOPGRAPHY } from "../../common/styles";
+import { COLOR, Spacer, TYPOPGRAPHY } from "../../common/styles";
 import TagMenu from "../TagMenu/TagMenu";
 import EditTagModal from "../Modals/Edit/EditTagModal";
 
 const ToolbarContainer = styled.div`
-    width: 150px;
+    width: 200px;
     min-height: 100vh;
-    padding: 1rem;
-    background: #inherit;
-    border-right: 0.5px solid ${COLOR.BORDER_COLOR};
-    min-width: 100px;
+    background: inherit;
+    border-right: 0.5px solid rgb(220, 234, 255);
+    min-width: 150px;
     padding-top: 2rem;
+`;
+const TagGroup = styled.div`
+    padding-inline: 0.5rem;
 `;
 const TagDisplay = styled.div`
     padding: 0.5rem;
@@ -32,26 +34,32 @@ const TagTitle = styled.h3`
     font-weight: 400;
     margin: 0;
 `;
+
+
 const Toolbar: React.FC<{ tagsArr: Tag[] }> = ({ tagsArr }) => {
     const [showEditTagModal, setShowEditTagModal] = React.useState(false);
 
     return (
         <ToolbarContainer>
             <AddNewTaskModal />
+            <Spacer $space={"2rem"} />
             <AddNewTagModal />
-            <EditTagModal showModal={showEditTagModal} setShowModal={setShowEditTagModal}/>
-            <div>
-                {tagsArr?.map((t: Tag, k: number) => {
-                    return (
-                        <TagDisplay key={k} style={{ background: t.color }}>
-                            <TagTitle>
-                                {t.name}
-                            </TagTitle>
-                            <TagMenu tagId={t.id} setShowTagModal={setShowEditTagModal} />
-                        </TagDisplay>
-                    )
-                })}
-            </div>
+            <EditTagModal showModal={showEditTagModal} setShowModal={setShowEditTagModal} />
+
+            <TagGroup>
+                <div>
+                    {tagsArr?.map((t: Tag, k: number) => {
+                        return (
+                            <TagDisplay key={k} style={{ background: t.color }}>
+                                <TagTitle>
+                                    {t.name}
+                                </TagTitle>
+                                <TagMenu tagId={t.id} setShowTagModal={setShowEditTagModal} />
+                            </TagDisplay>
+                        )
+                    })}
+                </div>
+            </TagGroup>
         </ToolbarContainer>
     )
 }

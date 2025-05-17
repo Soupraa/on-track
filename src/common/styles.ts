@@ -31,3 +31,7 @@ export const FlexEnd = styled.div`
 export const Spacer = styled.div<{ $space?: string }>`
   margin-bottom: ${({ $space }) => $space || "0rem"};
 `;
+
+export const CenterAlignContent = styled.div`
+    text-align: center;
+`;

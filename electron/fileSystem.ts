@@ -53,7 +53,6 @@ const getSavePath = (): string => {
 
     // Create app-data.json if it doesn't exist
     if (!fs.existsSync(savePath)) {
-        console.log("creating ")
         fs.writeFileSync(savePath, JSON.stringify(DEFAULT_DATA, null, 2));
     }
 
@@ -64,8 +63,6 @@ const saveTasks = (
     dashboardData: Omit<Dashboard, "todo" | "progress" | "done" | "updatedAt">,
     columnData: DashboardColumnData
 ): boolean => {
-
-    console.log(dashboardData, columnData, "inside save task")
     try {
         const savePath = getSavePath();
         let allDashboards: Dashboard[] = [];
@@ -132,7 +129,6 @@ const loadTasks = (): Dashboard[] => {
 
 const saveDashboards = (dashboards: Dashboard[]): void => {
     const savePath = getSavePath();
-    console.log("Attempting to write to file:", savePath);
     try {
         fs.writeFileSync(savePath, JSON.stringify(dashboards, null, 2));
         console.log("File written successfully!");

@@ -5,10 +5,15 @@ const FORM_STYLES = {
     BORDER_RADIUS: "0.5rem"
 }
 export const ModalTitle = styled.h1`
-    font-family: "Inter", sans-serif;
+    font-family: ${TYPOPGRAPHY.INTER};
     font-size: 1.5rem;
 `;
-
+export const SupportingText = styled.p`
+    color: #4a5565;
+    text-align: center;
+    font-family: ${TYPOPGRAPHY.INTER};
+    font-size: 0.95rem;
+`;
 export const Form = styled.form`
     display: flex;
     flex-direction: column;
@@ -58,6 +63,21 @@ export const NewTaskButton = styled.button`
     border: none;
     text-deocoration: none;
     padding: 1rem 2rem;
+    background: inherit;
+    color: white;
+    font-family: ${TYPOPGRAPHY.OSWALD};
+    font-size: 1.2rem;
+    border-block: 1px solid rgb(220, 234, 255);
+    width: 100%;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+        letter-spacing: 0.025rem;
+
+    &:hover {
+        background: rgb(220, 234, 255);
+        color: inherit;
+    }
 `;
 
 export const FormDropdown = styled.select`

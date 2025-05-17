@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import useTaskStore, { Task } from "../../store/useTaskStore";
 import useTagStore from "../../store/useTagStore";
@@ -17,73 +17,83 @@ const DashboardContainer = styled.div`
     background: ${COLOR.MAIN_BACKGROUND};
 `;
 
-const MainContent = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  margin: 0 auto;
-`;
-
 const ParagraphStyle = styled.p`
-  font-size: 0.875rem; /* Equivalent to text-sm */
-`;
+  font-size: 0.875rem;
+  `
 
 export default function Dashboard({ dashboardId }: DashboardProps) {
-    const { columns, moveTask, loadTasksByDashboardId } = useTaskStore();
+    const { columns, loadTasksByDashboardId } = useTaskStore();
     const { getDashboardTags, currentTags } = useTagStore();
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    const [fromColumnId, setFromColumnId] = useState<string>("");
+    const [fromIndex, setFormIndex] = useState<number | null>(null);
 
     useEffect(() => {
         loadTasksByDashboardId(dashboardId);
         getDashboardTags(dashboardId);
     }, [dashboardId]);
 
+    const handleDragOver = (index: number) => {
+        setHoveredIndex(index);
+    };
+
     return (
         <DashboardContainer>
             <Toolbar tagsArr={currentTags} />
-            {/* <MainContent> */}
-                {columns && (
-                    <>
-                        <Column
-                            id="todo"
-                            title="To Do"
-                            onDrop={(itemId: string) => moveTask(itemId, "todo")}
-                            count={columns.todo.length}
-                        >
-                            {columns.todo.map((item: Task) => (
-                                <Draggable key={item.id} item={item}>
-                                    <ParagraphStyle>{item.text}</ParagraphStyle>
-                                </Draggable>
-                            ))}
-                        </Column>
+            {columns && (
+                <>
+                    <Column
+                        columnId="todo"
+                        title="To Do"
+                        count={columns.todo.length}
+                        hoverIndex={hoveredIndex}
+                        fromColumnId={fromColumnId}
+                        fromIndex={fromIndex}
+                        setHoverIndex={setHoveredIndex}
 
-                        <Column
-                            id="progress"
-                            title="In Progress"
-                            onDrop={(itemId: string) => moveTask(itemId, "progress")}
-                            count={columns.progress.length}
-                        >
-                            {columns.progress.map((item: Task) => (
-                                <Draggable key={item.id} item={item}>
-                                    <ParagraphStyle>{item.text}</ParagraphStyle>
-                                </Draggable>
-                            ))}
-                        </Column>
+                    >
+                        {columns.todo.map((item: Task, index: number) => (
+                            <Draggable key={item.id} item={item} onDragOver={handleDragOver} index={index} hoverIndex={hoveredIndex} currentColumnId={"todo"} setFromColumnId={setFromColumnId} setFromIndex={setFormIndex}>
+                                <ParagraphStyle>{item.text}</ParagraphStyle>
+                            </Draggable>
+                        ))}
+                    </Column>
 
-                        <Column
-                            id="done"
-                            title="Done"
-                            onDrop={(itemId: string) => moveTask(itemId, "done")}
-                            count={columns.done.length}
-                        >
-                            {columns.done.map((item: Task) => (
-                                <Draggable key={item.id} item={item}>
-                                    <ParagraphStyle>{item.text}</ParagraphStyle>
-                                </Draggable>
-                            ))}
-                        </Column>
-                    </>
-                )}
-            {/* </MainContent> */}
+                    <Column
+                        columnId="progress"
+                        title="In Progress"
+                        count={columns.progress.length}
+                        hoverIndex={hoveredIndex}
+                        fromColumnId={fromColumnId}
+                        fromIndex={fromIndex}
+                        setHoverIndex={setHoveredIndex}
+
+                    >
+                        {columns.progress.map((item: Task, index: number) => (
+                            <Draggable key={item.id} item={item} onDragOver={handleDragOver} index={index} hoverIndex={hoveredIndex} currentColumnId={"progress"} setFromColumnId={setFromColumnId} setFromIndex={setFormIndex}>
+                                <ParagraphStyle>{item.text}</ParagraphStyle>
+                            </Draggable>
+                        ))}
+                    </Column>
+
+                    <Column
+                        columnId="done"
+                        title="Done"
+                        count={columns.done.length}
+                        hoverIndex={hoveredIndex}
+                        fromColumnId={fromColumnId}
+                        fromIndex={fromIndex}
+                        setHoverIndex={setHoveredIndex}
+
+                    >
+                        {columns.done.map((item: Task, index: number) => (
+                            <Draggable key={item.id} item={item} onDragOver={handleDragOver} index={index} hoverIndex={hoveredIndex} currentColumnId={"done"} setFromColumnId={setFromColumnId} setFromIndex={setFormIndex}>
+                                <ParagraphStyle>{item.text}</ParagraphStyle>
+                            </Draggable>
+                        ))}
+                    </Column>
+                </>
+            )}
         </DashboardContainer>
     );
 }

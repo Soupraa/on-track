@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useDashboardStore from "../../store/useDashboardStore";
-import { DashboardButton, DashboardList, Title, TopbarContainer } from "./DashboardNavigator.styles";
+import { DashboardButton, DashboardList, TopbarContainer } from "./DashboardNavigator.styles";
 import Dashboard from "../Dashboard/Dashboard";
-import ModalWrapper from "../ModalWrapper/ModalWrapper";
 import AddNewDashboardModal from "../Modals/Add/AddNewDashboardModal";
 import useTaskStore from "../../store/useTaskStore";
 import { Spacer } from "../../common/styles";
+import EditDashboardModal from "../Modals/Edit/EditDashboardModal";
+import DeleteDashboardModal from "../Modals/Delete/DeleteDashboardModal";
 
 const DashboardNavigator: React.FC = () => {
     const {
@@ -14,10 +15,11 @@ const DashboardNavigator: React.FC = () => {
         currentDashboardId,
         setActiveDashboard,
         setDashboardToEdit,
-        dashboardToEditId,
     } = useDashboardStore();
 
     const { loadTasksByDashboardId } = useTaskStore();
+    const [showEditDashboardModal, setShowEditDashboardModal] = useState(false);
+    const [showDeleteDashboardModal, setShowDeleteDashboardModal] = useState(false);
 
     useEffect(() => {
         initializeDashboards();
@@ -32,14 +34,26 @@ const DashboardNavigator: React.FC = () => {
         window.electronAPI?.onContextMenuCommand(({ action, id }) => {
             setDashboardToEdit(id);
             if (action === "edit") {
-                // setShowEditDashboardModal(true);
+                setShowEditDashboardModal(true);
             } else if (action === "delete") {
-                // setShowDeleteDashboardModal(true);
+                setShowDeleteDashboardModal(true);
             }
         });
     }, []);
     return (
         <TopbarContainer>
+            {showEditDashboardModal && (
+                <EditDashboardModal
+                    showModal={showEditDashboardModal}
+                    setShowModal={setShowEditDashboardModal}
+                />
+            )}
+            {showDeleteDashboardModal && (
+                <DeleteDashboardModal
+                    showModal={showDeleteDashboardModal}
+                    setShowModal={setShowDeleteDashboardModal}
+                />
+            )}
             <Spacer $space={"2rem"} />
             <DashboardList>
                 {dashboards.map((d) => (

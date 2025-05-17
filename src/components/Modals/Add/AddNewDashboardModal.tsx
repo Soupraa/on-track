@@ -1,18 +1,32 @@
 import { Plus } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import ModalWrapper from "../../ModalWrapper/ModalWrapper";
 import { ErrorText, Form, Input, Label, ModalTitle } from "../Modal.styles";
 import { isValidLength } from "../../../common/helpers";
 import ModalButtonGroup from "../../ModalButtonGroup/ModalButtonGroup";
-import { Spacer } from "../../../common/styles";
+import { COLOR, Spacer } from "../../../common/styles";
 import useDashboardStore from "../../../store/useDashboardStore";
+import { Tooltip } from "@mui/material";
+import styled from "styled-components";
 
+const AddNewButton = styled.button`
+    cursor: pointer;
+    border: none;
+    background: inherit;
+    color: white;
+    padding-inline: 1rem;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+        background-color: rgb(220, 234, 255);
+        color: inherit;
+    }
 
+`;
 export default function AddNewDashboardModal() {
     const { addNewDashboard } = useDashboardStore();
-    const [open, setOpen] = useState(false);
-    const [title, setTitle] = useState("");
-    const [titleError, setTitleError] = useState("");
+    const [open, setOpen] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>("");
+    const [titleError, setTitleError] = useState<string>("");
 
     const handleOpen = () => {
         setTitle("");
@@ -26,7 +40,6 @@ export default function AddNewDashboardModal() {
         setOpen(false);
     }
     const handleSubmit = async (e: any) => {
-        console.log("submitting", title)
         e.preventDefault();
         if (!title.trim()) {
             setTitleError("Name is required.");
@@ -41,16 +54,13 @@ export default function AddNewDashboardModal() {
     }
     return (
         <>
-            <div className="tooltip" data-tip="Add new dashboard">
-                <button
+            <Tooltip title="Add new dashboard" placement="top">
+                <AddNewButton
                     onClick={handleOpen}
-                    className={
-                        "px-4 py-2 rounded-t-2xl w-fit cursor-pointer font-oswald tracking-wide align-middle hover:bg-white transition-all"
-                    }
                 >
                     <Plus />
-                </button>
-            </div>
+                </AddNewButton>
+            </Tooltip>
             <ModalWrapper setIsOpen={setOpen} isOpen={open}>
                 <ModalTitle>Add a new dashboard</ModalTitle>
                 <Form onSubmit={handleSubmit}>

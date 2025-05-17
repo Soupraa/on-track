@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ErrorText, Form, FormDropdown, FormItem, Input, Label, ModalTitle, NewTaskButton, TextArea } from "../Modal.styles";
+import { ErrorText, Form, FormItem, Input, Label, ModalTitle, TextArea } from "../Modal.styles";
 import ModalWrapper from "../../ModalWrapper/ModalWrapper";
 import ModalButtonGroup from "../../ModalButtonGroup/ModalButtonGroup";
 import { TagSelector } from "../../TagSelector/TagSelector";
@@ -70,7 +70,7 @@ const EditTaskModal: React.FC<{ task: Task }> = ({ task }) => {
                 </DraggableButton>
             </Tooltip>
             <ModalWrapper setIsOpen={setOpen} isOpen={open}>
-                <ModalTitle>Update tag</ModalTitle>
+                <ModalTitle>Edit task</ModalTitle>
                 <Form onSubmit={handleSubmit}>
                     <FormItem>
                         <Label>Name</Label>

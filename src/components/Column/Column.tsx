@@ -1,13 +1,17 @@
 import React, { ReactNode, useState } from "react";
 import styled from "styled-components";
 import { COLOR, TYPOPGRAPHY } from "../../common/styles";
+import useTaskStore from "../../store/useTaskStore";
 
 interface ColumnProps {
-    id?: string;
+    columnId: string;
     title: string;
     children: ReactNode;
-    onDrop: (itemId: string) => void;
     count: number;
+    hoverIndex: any;
+    fromColumnId: string;
+    fromIndex: any;
+    setHoverIndex: (index: number) => void;
 }
 
 const ColumnWrapper = styled.div<{ $isActive: boolean }>`
@@ -28,15 +32,19 @@ const ColumnWrapper = styled.div<{ $isActive: boolean }>`
 `;
 
 const Title = styled.h2<{ $isActive: boolean }>`
-  margin-bottom: 2rem;
-  text-align: center;
-  font-size: 1.875rem;
-  font-family: ${TYPOPGRAPHY.SQUADA_ONE};
-  letter-spacing: 0.05rem;
-  font-weight: 100;
-  word-break: break-word;
-  overflow: hidden;
-  color: ${({ $isActive }) => ($isActive ? "white" : "white")};
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 1.875rem;
+    font-family: ${TYPOPGRAPHY.SQUADA_ONE};
+    letter-spacing: 0.05rem;
+    font-weight: 100;
+    word-break: break-word;
+    overflow: hidden;
+    color: ${({ $isActive }) => ($isActive ? "white" : "white")};
+    user-select: none;
+    -webkit-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none;
 `;
 
 const TaskContainer = styled.div`
@@ -44,12 +52,16 @@ const TaskContainer = styled.div`
   flex-direction: column;
 `;
 
-export default function Column({ id, title, children, onDrop, count }: ColumnProps) {
+export default function Column({ columnId, title, children, count, hoverIndex, fromColumnId, fromIndex, setHoverIndex }: ColumnProps) {
     const [isActive, setIsActive] = useState(false);
+    const { moveTaskToIndex } = useTaskStore();
 
-    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    const handleDragOverWrapper = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         setIsActive(true);
+        if ((e.target as HTMLElement).id === columnId) {
+            setHoverIndex(count);
+        }
     };
 
     const handleDragLeave = () => {
@@ -60,14 +72,16 @@ export default function Column({ id, title, children, onDrop, count }: ColumnPro
         e.preventDefault();
         setIsActive(false);
         const itemId = e.dataTransfer.getData("text/plain");
-        onDrop(itemId);
+
+        const toIndex = hoverIndex;
+        moveTaskToIndex(itemId, fromColumnId, columnId, fromIndex, toIndex);
     };
 
     return (
         <ColumnWrapper
-            id={id}
+            id={columnId}
             $isActive={isActive}
-            onDragOver={handleDragOver}
+            onDragOver={handleDragOverWrapper}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
         >

@@ -18,7 +18,7 @@ export const DashboardList = styled.div`
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  border-bottom: 1px solid ${COLOR.BORDER_COLOR};
+  border-bottom: 1px solid rgb(220, 234, 255);
   &::-webkit-scrollbar {
     display: none;
   }
@@ -31,12 +31,14 @@ export const DashboardButton = styled.button<{ $isActive: boolean }>`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1rem;
-    background-color: ${({ $isActive }) => ($isActive ? "#ffffff" : "#e5e7eb")}; // white or gray-200
+    font-size: 1.1rem;
+    background: ${({ $isActive }) => ($isActive ? "rgb(220, 234, 255)" : "inherit")};
+
+    color: ${({ $isActive }) => ($isActive ? "inherit" : "white")};
     border: none;
     padding: 0.5rem 1rem;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem; 
+    // border-top-left-radius: 1rem;
+    // border-top-right-radius: 1rem; 
     width: fit-content; 
     cursor: pointer;
     font-family: ${TYPOPGRAPHY.OSWALD};
@@ -44,6 +46,7 @@ export const DashboardButton = styled.button<{ $isActive: boolean }>`
     vertical-align: middle; 
     transition: all 0.2s ease-in-out;
     &:hover {
-        background-color: #f3f4f6;
+        background-color: rgb(220, 234, 255);
+        color: inherit;
     }
 `

@@ -1,14 +1,40 @@
 import { useState } from "react";
-import { Spacer } from "../../../common/styles";
+import { Spacer, TYPOPGRAPHY } from "../../../common/styles";
 import ModalButtonGroup from "../../ModalButtonGroup/ModalButtonGroup";
 import ModalWrapper from "../../ModalWrapper/ModalWrapper";
-import { ErrorText, Form, Input, Label, ModalTitle, NewTaskButton } from "../Modal.styles";
+import { ErrorText, Form, Input, Label, ModalTitle } from "../Modal.styles";
 import { isValidLength } from "../../../common/helpers";
 import { ColorSelector } from "../../ColorSelector/ColorSelector";
 import useTagStore from "../../../store/useTagStore";
 import useDashboardStore from "../../../store/useDashboardStore";
 import { v4 as uuidv4 } from 'uuid';
+import styled from "styled-components";
+import { Plus } from "lucide-react";
+import { Tooltip } from "@mui/material";
 
+const NewTagButton = styled.button`
+    border: none;
+    background: inherit;
+    color: white;
+    display: inline;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        color: #99a1af;
+    }
+;
+`;
+const SubTitle = styled.h2`
+    font-family: ${TYPOPGRAPHY.OSWALD};
+    color: white;
+    font-size: 1.2rem;
+    letter-spacing: 0.025rem;
+    display: inline;
+    vertical-align: middle;
+    padding-left: 0.5rem;
+`;
 export default function AddNewTagModal() {
     const [open, setOpen] = useState<boolean>(false);
     const [title, setTitle] = useState<string>("");
@@ -61,11 +87,13 @@ export default function AddNewTagModal() {
 
     return (
         <>
-            <NewTaskButton
-                onClick={handleOpen}
-            >
-                New Tag
-            </NewTaskButton>
+            <SubTitle>Tags</SubTitle>
+            <Tooltip title="Add new tag" placement="top">
+                <NewTagButton
+                    onClick={handleOpen}
+                >
+                    <Plus />
+                </NewTagButton></Tooltip>
             <ModalWrapper setIsOpen={setOpen} isOpen={open}>
                 <ModalTitle>Add a new tag</ModalTitle>
                 <Form onSubmit={handleSubmit}>

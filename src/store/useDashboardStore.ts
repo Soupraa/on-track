@@ -14,17 +14,19 @@ export interface Dashboard {
 }
 
 interface DashboardState {
-    currentDashboardId: string | null;
+    currentDashboardId: string;
     dashboards: Dashboard[];
-    dashboardToEditId: string | null;
+    dashboardToEditId: string;
 
     initializeDashboards: () => Promise<boolean>;
-    setActiveDashboard: (dashboardId: string | null) => void;
+    setActiveDashboard: (dashboardId: string) => void;
     saveDashboards: () => Promise<void>;
     editExistingDashboard: (dashboardId: string, newTitle: string) => Promise<void>;
-    setDashboardToEdit: (dashboardId: string | null) => void;
+    setDashboardToEdit: (dashboardId: string) => void;
     addNewDashboard: (dashboardName: string) => Promise<void>;
     deleteDashboard: (dashboardId: string) => Promise<void>;
+    getDashboardById: (dashboardId: string) => Dashboard | undefined;
+
 }
 
 const useDashboardStore = create<DashboardState>((set, get) => {
@@ -45,9 +47,9 @@ const useDashboardStore = create<DashboardState>((set, get) => {
     };
 
     return {
-        currentDashboardId: null,
+        currentDashboardId: "",
         dashboards: [],
-        dashboardToEditId: null,
+        dashboardToEditId: "",
 
         initializeDashboards: async () => {
             const data = await loadDashboardsFromDisk();
@@ -66,12 +68,11 @@ const useDashboardStore = create<DashboardState>((set, get) => {
                     createdAt: d.createdAt,
                 })),
             });
-            console.log(get().dashboards);
             await persistDashboards(get().dashboards);
             return true;
         },
 
-        setActiveDashboard: (dashboardId: string | null) => {
+        setActiveDashboard: (dashboardId: string) => {
             set({ currentDashboardId: dashboardId });
         },
 
@@ -90,7 +91,7 @@ const useDashboardStore = create<DashboardState>((set, get) => {
             await persistDashboards(updated);
         },
 
-        setDashboardToEdit: (dashboardId: string | null) => {
+        setDashboardToEdit: (dashboardId: string) => {
             set({ dashboardToEditId: dashboardId });
         },
 
@@ -117,13 +118,17 @@ const useDashboardStore = create<DashboardState>((set, get) => {
         deleteDashboard: async (dashboardId: string) => {
             const dashboards = await loadDashboardsFromDisk();
 
-            const filtered = dashboards.filter((d) => d.id !== dashboardId);
-            const newActive = filtered.length > 0 ? filtered[0].id : null;
+            const filtered: Dashboard[] = dashboards.filter((d) => d.id !== dashboardId);
+            const newActive: any = filtered.length > 0 ? filtered[0].id : null;
 
             get().setActiveDashboard(newActive);
             set({ dashboards: filtered });
             await persistDashboards(filtered);
         },
+        getDashboardById: (dashboardId: string) => {
+            return get().dashboards.find((d) => d.id === dashboardId);
+            
+        }
     };
 });
 
