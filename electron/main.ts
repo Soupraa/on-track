@@ -1,20 +1,21 @@
-import { app, BrowserWindow, ipcMain, Menu } from 'electron';
+import { app, BrowserWindow, globalShortcut, ipcMain, Menu } from 'electron';
 import * as path from 'path';
-import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer";
 import { loadTasks, saveDashboards, saveTasks } from './fileSystem'
 
-let mainWindow;
+let mainWindow: BrowserWindow;
 
 function createWindow() {
- mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1400,
-    height: 1000,
+    height: 900,
     minHeight: 620,
     minWidth: 1000,
-    // icon: path.join(__dirname, "icons/icon.png"),
+    resizable: true,
+    autoHideMenuBar: true,
+    icon: path.join(__dirname, "icons/icon.png"),
     webPreferences: {
       nodeIntegration: false,
-      contextIsolation: false,
+      contextIsolation: true,
       webSecurity: false,
       preload: path.join(__dirname, "preload.js"),
     },
@@ -27,28 +28,22 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:3000/index.html');
 
     mainWindow.webContents.openDevTools();
-
-    // Hot Reloading on 'node_modules/.bin/electronPath'
-    require('electron-reload')(__dirname, {
-      electron: path.join(__dirname,
-        '..',
-        '..',
-        'node_modules',
-        '.bin',
-        'electron' + (process.platform === "win32" ? ".cmd" : "")),
-      forceHardReset: true,
-      hardResetMethod: 'exit'
-    });
   }
+  mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.setZoomFactor(1);
+    mainWindow.webContents.setZoomLevel(0);
+    mainWindow.webContents.setVisualZoomLevelLimits(1, 1);
+  });
 }
 
 app.whenReady().then(() => {
-  // DevTools
-  installExtension(REACT_DEVELOPER_TOOLS)
-    .then((name) => console.log(`Added Extension:  ${name}`))
-    .catch((err) => console.log('An error occurred: ', err));
-
   createWindow();
+  
+  //disable manual reload in prod.
+  if (app.isPackaged) {
+    globalShortcut.register('CommandOrControl+R', () => { });
+    globalShortcut.register('F5', () => { });
+  }
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
