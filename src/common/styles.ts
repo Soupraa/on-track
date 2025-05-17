@@ -8,7 +8,8 @@ export const TYPOPGRAPHY  = {
 export const COLOR = {
     MAIN_BACKGROUND: "#0a0a0a",
     SECONDARY_BACKGROUND: "#1a1a1a",
-    BORDER_COLOR: "#272727"
+    BORDER_COLOR: "#272727",
+    BORDER_COLOR_LIGHT: "rgb(220, 234, 255)"
 }
 export const FlexStart = styled.div`
     justify-content: flex-start;

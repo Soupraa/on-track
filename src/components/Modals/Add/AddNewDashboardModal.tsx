@@ -4,10 +4,11 @@ import ModalWrapper from "../../ModalWrapper/ModalWrapper";
 import { ErrorText, Form, Input, Label, ModalTitle } from "../Modal.styles";
 import { isValidLength } from "../../../common/helpers";
 import ModalButtonGroup from "../../ModalButtonGroup/ModalButtonGroup";
-import { COLOR, Spacer } from "../../../common/styles";
+import { Spacer } from "../../../common/styles";
 import useDashboardStore from "../../../store/useDashboardStore";
 import { Tooltip } from "@mui/material";
 import styled from "styled-components";
+import GetStarted from "../../GetStarted/GetStarted";
 
 const AddNewButton = styled.button`
     cursor: pointer;
@@ -22,7 +23,7 @@ const AddNewButton = styled.button`
     }
 
 `;
-export default function AddNewDashboardModal() {
+const AddNewDashboardModal: React.FC<{ type?: string }> = ({ type }) => {
     const { addNewDashboard } = useDashboardStore();
     const [open, setOpen] = useState<boolean>(false);
     const [title, setTitle] = useState<string>("");
@@ -54,13 +55,16 @@ export default function AddNewDashboardModal() {
     }
     return (
         <>
-            <Tooltip title="Add new dashboard" placement="top">
-                <AddNewButton
-                    onClick={handleOpen}
-                >
-                    <Plus />
-                </AddNewButton>
-            </Tooltip>
+            {type === 'top' ? (
+                <Tooltip title="Add new dashboard" placement="top">
+                    <AddNewButton
+                        onClick={handleOpen}
+                    >
+                        <Plus />
+                    </AddNewButton>
+                </Tooltip>
+            ) : <GetStarted handleClick={handleOpen}/>}
+
             <ModalWrapper setIsOpen={setOpen} isOpen={open}>
                 <ModalTitle>Add a new dashboard</ModalTitle>
                 <Form onSubmit={handleSubmit}>
@@ -84,3 +88,4 @@ export default function AddNewDashboardModal() {
         </>
     )
 }
+export default AddNewDashboardModal;

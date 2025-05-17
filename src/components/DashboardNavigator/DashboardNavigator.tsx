@@ -70,9 +70,10 @@ const DashboardNavigator: React.FC = () => {
                         {d.title}
                     </DashboardButton>
                 ))}
-                {dashboards.length < 6 && <AddNewDashboardModal />}
+                {(dashboards.length < 6 && dashboards.length > 0) && <AddNewDashboardModal type={'top'} />}
 
             </DashboardList>
+            {dashboards.length === 0 && <AddNewDashboardModal />}
             {currentDashboardId && dashboards.length > 0 && (
                 <Dashboard dashboardId={currentDashboardId} />
             )}

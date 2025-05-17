@@ -19,6 +19,7 @@
     "electron-devtools-installer": "^4.0.0",
     "electron-is-dev": "^3.0.1",
     "electron-reload": "^2.0.0-alpha.1",
+    "gsap": "^3.13.0",
     "lucide-react": "^0.510.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

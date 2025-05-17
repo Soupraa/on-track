@@ -33,12 +33,9 @@ export const DashboardButton = styled.button<{ $isActive: boolean }>`
     text-overflow: ellipsis;
     font-size: 1.1rem;
     background: ${({ $isActive }) => ($isActive ? "rgb(220, 234, 255)" : "inherit")};
-
     color: ${({ $isActive }) => ($isActive ? "inherit" : "white")};
     border: none;
     padding: 0.5rem 1rem;
-    // border-top-left-radius: 1rem;
-    // border-top-right-radius: 1rem; 
     width: fit-content; 
     cursor: pointer;
     font-family: ${TYPOPGRAPHY.OSWALD};

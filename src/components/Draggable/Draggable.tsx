@@ -21,27 +21,26 @@ interface DraggableProps {
 }
 
 const DraggableContainer = styled.div<{ $isDragging: boolean; $isHovered: boolean }>`
-  cursor: grab;
-  padding: 0.5rem;
-  margin: 0.5rem;
-  background-color: #fef3c6;
-  border: 1px solid #00000022;
-  border-radius: 0.1rem 0.1rem 0.5rem 0.5rem;
-  font-family: Inter, sans-serif;
-  color: black;
-  overflow: visible;
-  user-select: none;
-  text-align: left;
-  box-shadow: ${({ $isDragging }) =>
-        $isDragging
-            ? "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)"
-            : "0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06)"};
-  transform: ${({ $isDragging }) => ($isDragging ? "scale(1.02)" : "scale(1)")};
-  transition: all 0.2s ease;
-  opacity: ${({ $isDragging }) => ($isDragging ? 0.9 : 1)};
-
+    cursor: grab;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    background-color: #fef3c6;
+    border: 1px solid #00000022;
+    border-radius: 0.1rem 0.1rem 0.5rem 0.5rem;
+    font-family: Inter, sans-serif;
+    color: black;
+    overflow: visible;
+    user-select: none;
+    text-align: left;
+    box-shadow: ${({ $isDragging }) =>
+            $isDragging
+                ? "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)"
+                : "0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06)"};
+    transform: ${({ $isDragging }) => ($isDragging ? "scale(1.02)" : "scale(1)")};
+    transition: all 0.2s ease;
+    opacity: ${({ $isDragging }) => ($isDragging ? 0.9 : 1)};
     border-top: ${({ $isHovered }) => ($isHovered ? "4px solid #3b82f6" : "1px solid #00000022")};
-  margin-top: ${({ $isHovered }) => ($isHovered ? "0.25rem" : "0.5rem")};
+    margin-top: ${({ $isHovered }) => ($isHovered ? "0.25rem" : "0.5rem")};
 `;
 
 const Header = styled.div`
