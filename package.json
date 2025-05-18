@@ -40,6 +40,9 @@
   },
   "main": "build/electron/main.js",
   "build": {
+    "appId": "com.on.track",
+    "productName": "OnTrack",
+    "icon": "electron/icons/icon.icns",
     "files": [
       "build/**/*",
       "build/electron/**/*"
@@ -47,6 +50,13 @@
     "directories": {
       "buildResources": "assets",
       "output": "release"
+    },
+    "win": {
+      "icon": "electron/icons/icon.ico"
+    },
+    "mac": {
+        "target": ["dmg", "zip"],
+      "category": "public.app-category.productivity"
     },
     "extraMetadata": {
       "main": "build/electron/main.js"

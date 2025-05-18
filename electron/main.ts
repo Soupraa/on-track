@@ -43,6 +43,8 @@ app.whenReady().then(() => {
   if (app.isPackaged) {
     globalShortcut.register('CommandOrControl+R', () => { });
     globalShortcut.register('F5', () => { });
+    mainWindow.setMenuBarVisibility(false);
+    mainWindow.removeMenu();
   }
 
   app.on('activate', () => {

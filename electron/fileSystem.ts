@@ -26,8 +26,9 @@ const DEFAULT_DATA: Dashboard[] = [];
 
 
 const getSavePath = (): string => {
-    const savesDir = path.join(__dirname, "saves");
-    const savePath = path.join(savesDir, "app-data.json");
+    const userDataDir = app.getPath('userData');
+    const savesDir = path.join(userDataDir, 'saves');
+    const savePath = path.join(savesDir, 'app-data.json');
 
     // Create saves/ directory if it doesn't exist
     if (!fs.existsSync(savesDir)) {
@@ -40,7 +41,6 @@ const getSavePath = (): string => {
     }
 
     return savePath;
-    // return path.join(__dirname, "saves/app-data.json");
 };
 const saveTasks = (
     dashboardData: Omit<Dashboard, "todo" | "progress" | "done" | "updatedAt">,
