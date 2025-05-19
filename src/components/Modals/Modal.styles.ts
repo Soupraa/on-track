@@ -75,7 +75,7 @@ export const NewTaskButton = styled.button`
 
     &:hover {
         background: rgb(121, 151, 194);
-        color: inherit;
+        color: ${({ theme }) => theme.COLORS.INVERSE_TEXT_COLOR};
     }
 `;
 

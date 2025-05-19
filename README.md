@@ -10,9 +10,10 @@ This is a desktop application complied with electron and create-react-app. A sim
 
 ## How to build
 - run "yarn"
-- run "yarn electron:dev" to run dev version locally\
+- run "yarn electron:dev" to run dev version locally
 
 ## Extras
+This is an unsigned product so there maybe anti-virus warnings.
 Enjoy simplfied tasking.
 
 

@@ -22,7 +22,7 @@ export default function Dashboard({ dashboardId }: DashboardProps) {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [fromColumnId, setFromColumnId] = useState<string>("");
     const [fromIndex, setFormIndex] = useState<number | null>(null);
-    const finalColumns = [{ id: "todo", title: "To Do" }, { id: "progress", title: "In progress" }, { id: "done", title: "Done" }];
+    const finalColumns = [{ id: "todo", title: "To Do" }, { id: "progress", title: "In Progress" }, { id: "done", title: "Done" }];
     useEffect(() => {
         loadTasksByDashboardId(dashboardId);
         getDashboardTags(dashboardId);

@@ -88,6 +88,7 @@ const DraggableBody = styled.div`
   white-space: normal;
   overflow-wrap: break-word;
   line-height: 1.5;
+  font-size: 0.880rem;
 
   a {
     color: #2563eb;
@@ -104,9 +105,6 @@ const DraggableTags = styled.div`
     gap: 0.25rem;
     margin-top: 0.5rem;
 `;
-const ParagraphStyle = styled.p`
-  font-size: 0.875rem;
-  `
 
 export default function Draggable({ onDragEnd, item, onDragOver, index, currentColumnId, setFromColumnId, setFromIndex, hoverIndex }: DraggableProps) {
     const [isDragging, setIsDragging] = useState(false);

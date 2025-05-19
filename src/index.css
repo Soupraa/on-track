@@ -1,11 +1,11 @@
 :root {
-  --bg-color: #ffffff;
-  --scroll-color: #b4b4b4;
+  --bg-color: rgb(255, 250, 241);
+  --scroll-color: rgb(219, 208, 186);
 }
 
 body.dark {
-  --bg-color: #0a0a0a;
-  --scroll-color: #303030;
+  --bg-color: #110f17;
+  --scroll-color: #312c43;
 }
 
 html, body, #root {

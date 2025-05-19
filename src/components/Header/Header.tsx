@@ -1,21 +1,34 @@
 import React from "react";
 import styled from "styled-components";
-import { FlexEnd, FlexStart } from "../../common/styles";
+import { FlexEnd, FlexStart, TYPOPGRAPHY } from "../../common/styles";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
+import LiveClock from "../LiveClock/LiveClock";
 
 const Container = styled.div`
-    margin-bottom: -45px;
-    padding: 1rem;
+    margin-bottom: -35px;
+    padding-block: 0.6rem;
+    padding-inline: 0.6rem;
     overflow: hidden;
 `;
-const Header:React.FC = () => {
+const ClockContainer = styled.div`
+    color: ${({ theme }) => theme.COLORS.TEXT_COLOR};
+    font-family: ${TYPOPGRAPHY.SQUADA_ONE};
+    font-size: 1.5rem;
+    user-select: none;
+    -webkit-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none;
+`;
+const Header: React.FC = () => {
     return (
         <Container>
             <FlexStart>
-                asd
+                <ClockContainer>
+                    <LiveClock />
+                </ClockContainer>
             </FlexStart>
             <FlexEnd>
-                <ThemeSwitch/>
+                <ThemeSwitch />
             </FlexEnd>
         </Container>
     )

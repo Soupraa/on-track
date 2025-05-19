@@ -1,8 +1,9 @@
 {
   "name": "on-track",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "homepage": ".",
+  "author": "Richard Gao",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -54,7 +55,18 @@
     },
     "win": {
       "icon": "electron/icons/icon.ico",
-      "target": "portable"
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "OnTrack"
     },
     "mac": {
       "target": [
