@@ -14,12 +14,12 @@ const AddNewButton = styled.button`
     cursor: pointer;
     border: none;
     background: inherit;
-    color: white;
+    color: ${({ theme }) => theme.COLORS.TEXT_COLOR};
     padding-inline: 1rem;
     transition: all 0.2s ease-in-out;
     &:hover {
-        background-color: rgb(220, 234, 255);
-        color: inherit;
+        background-color: rgb(121, 151, 194);
+        color: ${({ theme }) => theme.COLORS.INVERSE_TEXT_COLOR};
     }
 
 `;

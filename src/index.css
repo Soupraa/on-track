@@ -1,3 +1,13 @@
+:root {
+  --bg-color: #ffffff;
+  --scroll-color: #b4b4b4;
+}
+
+body.dark {
+  --bg-color: #0a0a0a;
+  --scroll-color: #303030;
+}
+
 html, body, #root {
   height: 100%;
   width: 100%;
@@ -5,7 +15,23 @@ html, body, #root {
   padding: 0;
   overflow: auto;
   position: relative;
-  background: #0a0a0a;
+  background-color: var(--bg-color);
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-color);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

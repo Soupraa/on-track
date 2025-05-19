@@ -15,26 +15,16 @@ import { Tooltip } from "@mui/material";
 const NewTagButton = styled.button`
     border: none;
     background: inherit;
-    color: white;
+    color: ${({ theme }) => theme.COLORS.TEXT_COLOR};
     display: inline;
     vertical-align: middle;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
-
     &:hover {
         color: #99a1af;
     }
 ;
 `;
-const SubTitle = styled.h2`
-    font-family: ${TYPOPGRAPHY.OSWALD};
-    color: white;
-    font-size: 1.2rem;
-    letter-spacing: 0.025rem;
-    display: inline;
-    vertical-align: middle;
-    padding-left: 0.5rem;
-`;
+
 export default function AddNewTagModal() {
     const [open, setOpen] = useState<boolean>(false);
     const [title, setTitle] = useState<string>("");
@@ -87,7 +77,6 @@ export default function AddNewTagModal() {
 
     return (
         <>
-            <SubTitle>Tags</SubTitle>
             <Tooltip title="Add new tag" placement="top">
                 <NewTagButton
                     onClick={handleOpen}

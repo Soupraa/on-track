@@ -4,7 +4,7 @@ import { TYPOPGRAPHY } from '../../common/styles';
 import gsap from 'gsap';
 
 const LoadingText = styled.p`
-    color: white;
+    color: ${({theme}) => theme.COLORS.TEXT_COLOR};
     font-family: ${TYPOPGRAPHY.OSWALD};
     letter-spacing: 0.025rem;
     font-size: 1.5rem;

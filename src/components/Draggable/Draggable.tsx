@@ -6,10 +6,10 @@ import styled from "styled-components";
 import { FlexEnd, FlexStart } from "../../common/styles";
 import { Tag } from "../../store/useTagStore";
 import EditTaskModal from "../Modals/Edit/EditTaskModal";
+import { formatPlainText } from "../../common/helpers";
 
 
 interface DraggableProps {
-    children: React.ReactNode;
     onDragEnd?: () => void;
     index: number;
     onDragOver: (index: number) => void;
@@ -33,9 +33,9 @@ const DraggableContainer = styled.div<{ $isDragging: boolean; $isHovered: boolea
     user-select: none;
     text-align: left;
     box-shadow: ${({ $isDragging }) =>
-            $isDragging
-                ? "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)"
-                : "0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06)"};
+        $isDragging
+            ? "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)"
+            : "0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06)"};
     transform: ${({ $isDragging }) => ($isDragging ? "scale(1.02)" : "scale(1)")};
     transition: all 0.2s ease;
     opacity: ${({ $isDragging }) => ($isDragging ? 0.9 : 1)};
@@ -85,16 +85,30 @@ const DraggableTitle = styled.h3`
 `;
 
 const DraggableBody = styled.div`
-    white-space: normal;
-    overflow-wrap: break-word;
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.5;
+
+  a {
+    color: #2563eb;
+    text-decoration: underline;
+    &:hover {
+      color: #1d4ed8;
+    }
+  }
 `;
+
 const DraggableTags = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem;
     margin-top: 0.5rem;
 `;
-export default function Draggable({ children, onDragEnd, item, onDragOver, index, currentColumnId, setFromColumnId, setFromIndex, hoverIndex }: DraggableProps) {
+const ParagraphStyle = styled.p`
+  font-size: 0.875rem;
+  `
+
+export default function Draggable({ onDragEnd, item, onDragOver, index, currentColumnId, setFromColumnId, setFromIndex, hoverIndex }: DraggableProps) {
     const [isDragging, setIsDragging] = useState(false);
     const strike = item.strike;
     const isOpen = item.isOpen ?? true;
@@ -195,9 +209,13 @@ export default function Draggable({ children, onDragEnd, item, onDragOver, index
                     </DraggableTitle>
                 </AccordionSummary>
                 <AccordionDetails style={{ padding: 0, margin: 0 }}>
-                    <DraggableBody>
-                        {strike ? <s>{children}</s> : children}
-                    </DraggableBody>
+                    <DraggableBody
+                        dangerouslySetInnerHTML={{
+                            __html: strike
+                                ? `<s>${formatPlainText(item.text)}</s>`
+                                : formatPlainText(item.text),
+                        }}
+                    />
                 </AccordionDetails>
             </Accordion>
 

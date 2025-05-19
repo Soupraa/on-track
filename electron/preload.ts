@@ -1,26 +1,23 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
-
-type ColumnData = {
-    todo: any[];
-    progress: any[];
-    done: any[];
-};
+import { Dashboard, DashboardColumnData, SavedData } from "./fileSystem";
 
 type DashboardData = {
     id: string;
     title: string;
     tags: string[];
+    createdAt?: string;
+    updatedAt?: string;
 };
 
 type ContextMenuCallback = (payload: { action: string; id: string }) => void;
 
 contextBridge.exposeInMainWorld("electronAPI", {
     // Task methods
-    loadTasks: (): Promise<any> => ipcRenderer.invoke("load-tasks"),
+    loadTasks: (): Promise<Dashboard[]> => ipcRenderer.invoke("load-tasks"),
 
     saveTasks: async (
         dashboardData: DashboardData,
-        columnData: ColumnData
+        columnData: DashboardColumnData
     ): Promise<void> => {
         const cleanData = {
             todo: JSON.parse(JSON.stringify(columnData.todo || [])),
@@ -29,9 +26,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
         };
         ipcRenderer.send("save-tasks", dashboardData, cleanData);
     },
-
-    saveDashboards: async (dashboards: any[]): Promise<void> => {
-        ipcRenderer.send("save-dashboards", dashboards);
+    getAppState: (): Promise<SavedData> => ipcRenderer.invoke("get-app-state"),
+    saveSettings: async (settings: any): Promise<void> => {
+        ipcRenderer.send("save-settings", settings);
+    },
+    saveDashboards: async (appData: any, dashboards: Dashboard[]): Promise<void> => {
+        ipcRenderer.send("save-dashboards", appData, dashboards);
     },
 
     showContextMenu: (dashboardId: string): void => {

@@ -1,6 +1,6 @@
 import { app, BrowserWindow, globalShortcut, ipcMain, Menu } from 'electron';
 import * as path from 'path';
-import { loadTasks, saveDashboards, saveTasks } from './fileSystem'
+import { loadTasks, saveDashboards, saveTasks, getAppState, saveSettings } from './fileSystem'
 
 let mainWindow: BrowserWindow;
 
@@ -38,7 +38,7 @@ function createWindow() {
 
 app.whenReady().then(() => {
   createWindow();
-  
+
   //disable manual reload in prod.
   if (app.isPackaged) {
     globalShortcut.register('CommandOrControl+R', () => { });
@@ -68,10 +68,15 @@ ipcMain.on("save-tasks", (event, dashboardData, columnData) => {
   saveTasks(dashboardData, columnData);
 });
 
-ipcMain.on("save-dashboards", (event, dashboards) => {
-  saveDashboards(dashboards);
+ipcMain.on("save-dashboards", (event, appData, dashboards) => {
+  saveDashboards(appData, dashboards);
 });
-
+ipcMain.handle("get-app-state", async () => {
+  return getAppState();
+})
+ipcMain.on("save-settings", (event, settings) => {
+  saveSettings(settings);
+})
 ipcMain.on("show-dashboard-context-menu", (event, dashboardId) => {
   const menu = Menu.buildFromTemplate([
     {

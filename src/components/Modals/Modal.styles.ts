@@ -63,10 +63,10 @@ export const NewTaskButton = styled.button`
     text-deocoration: none;
     padding: 1rem 2rem;
     background: inherit;
-    color: white;
+    color: ${({ theme }) => theme.COLORS.TEXT_COLOR};
     font-family: ${TYPOPGRAPHY.OSWALD};
     font-size: 1.2rem;
-    border-block: 1px solid rgb(220, 234, 255);
+    border-block: ${({ theme }) => `1px solid ${theme.COLORS.BORDER_COLOR_LIGHT}`};
     width: 100%;
     cursor: pointer;
     font-weight: 500;
@@ -74,7 +74,7 @@ export const NewTaskButton = styled.button`
     letter-spacing: 0.025rem;
 
     &:hover {
-        background: rgb(220, 234, 255);
+        background: rgb(121, 151, 194);
         color: inherit;
     }
 `;
