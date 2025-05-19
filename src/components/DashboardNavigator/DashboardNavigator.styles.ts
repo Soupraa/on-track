@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { COLOR, TYPOPGRAPHY } from "../../common/styles";
+import { TYPOPGRAPHY } from "../../common/styles";
 
 export const TopbarContainer = styled.div`
   width: 100%;
-  background-color: ${COLOR.MAIN_BACKGROUND};
+  background-color: ${({ theme }) => theme.COLORS.MAIN_BACKGROUND};
 `;
 
 export const Title = styled.h1`
@@ -18,7 +18,7 @@ export const DashboardList = styled.div`
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  border-bottom: 1px solid rgb(220, 234, 255);
+  border-bottom: ${({ theme }) => `1px solid ${theme.COLORS.BORDER_COLOR_LIGHT}`};
   &::-webkit-scrollbar {
     display: none;
   }
@@ -32,8 +32,8 @@ export const DashboardButton = styled.button<{ $isActive: boolean }>`
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 1.1rem;
-    background: ${({ $isActive }) => ($isActive ? "rgb(220, 234, 255)" : "inherit")};
-    color: ${({ $isActive }) => ($isActive ? "inherit" : "white")};
+    background: ${({ $isActive }) => ($isActive ? "rgb(121, 151, 194)" : "inherit")};
+    color: ${({ $isActive, theme }) => ($isActive ? theme.COLORS.INVERSE_TEXT_COLOR : theme.COLORS.TEXT_COLOR)};
     border: none;
     padding: 0.5rem 1rem;
     width: fit-content; 
@@ -43,7 +43,7 @@ export const DashboardButton = styled.button<{ $isActive: boolean }>`
     vertical-align: middle; 
     transition: all 0.2s ease-in-out;
     &:hover {
-        background-color: rgb(220, 234, 255);
-        color: inherit;
+        background-color: rgb(121, 151, 194);
+        color: ${({ theme }) => theme.COLORS.INVERSE_TEXT_COLOR};
     }
 `

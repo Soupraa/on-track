@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import useDashboardStore, { Dashboard } from "./useDashboardStore";
 import useTaskStore from "./useTaskStore";
+import useAppStore from "./useAppStore";
 
 export interface Tag {
   id: string;
@@ -33,7 +34,7 @@ const useTagStore = create<TagStoreState>((set, get) => {
   };
 
   const persistDashboards = async (dashboards: Dashboard[]) => {
-    await window.electronAPI?.saveDashboards(dashboards);
+    await window.electronAPI?.saveDashboards({ isLightMode: useAppStore.getState().isLightMode }, dashboards);
   };
 
   return {
@@ -74,9 +75,9 @@ const useTagStore = create<TagStoreState>((set, get) => {
       const updatedDashboards = dashboards.map((dashboard) =>
         dashboard.id === targetId
           ? {
-              ...dashboard,
-              tags: (dashboard.tags || []).filter((tag) => tag.id !== tagId),
-            }
+            ...dashboard,
+            tags: (dashboard.tags || []).filter((tag) => tag.id !== tagId),
+          }
           : dashboard
       );
 

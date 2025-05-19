@@ -18,14 +18,13 @@ const ColumnWrapper = styled.div<{ $isActive: boolean }>`
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  height: 100vh;
   padding-inline: 0.5rem;
   padding-top: 0.5rem;
   flex: 1; 
   max-width: 50%; 
   min-width: 0;
-  background-color: ${({ $isActive }) =>
-        $isActive ? "#1a1a1a" : COLOR.MAIN_BACKGROUND};
+  background-color: ${({ $isActive, theme }) =>
+        $isActive ? theme.COLORS.COLUMN_HOVER_COLOR : theme.COLORS.MAIN_BACKGROUND};
   border-right: 1px solid ${({ $isActive }) =>
         $isActive ? "#1a1a1a" : COLOR.BORDER_COLOR};
   transition: all 0.3s ease;
@@ -40,7 +39,7 @@ const Title = styled.h2<{ $isActive: boolean }>`
     font-weight: 100;
     word-break: break-word;
     overflow: hidden;
-    color: ${({ $isActive }) => ($isActive ? "white" : "white")};
+    color: ${({ $isActive, theme}) => ($isActive ? theme.COLORS.TEXT_COLOR : theme.COLORS.TEXT_COLOR)};
     user-select: none;
     -webkit-user-select: none; 
     -moz-user-select: none;

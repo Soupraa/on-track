@@ -9,19 +9,19 @@ const GetStartedContainer = styled.div`
 `;
 const StartButton = styled.button`
     background: inherit;
-    border: 1px dashed ${COLOR.BORDER_COLOR_LIGHT};
+    border: ${({ theme }) => `1px dashed ${theme.COLORS.BORDER_COLOR_LIGHT}`};
     padding: 2.5rem;
     font-size: 3rem;
     font-family: ${TYPOPGRAPHY.OSWALD};
-    color: white;
+    color: ${({ theme }) => theme.COLORS.TEXT_COLOR};
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     &:hover {
-        background-color: ${COLOR.BORDER_COLOR};
+        background-color:  ${({ theme }) => theme.COLORS.COLUMN_HOVER_COLOR};
     }
 `;
 const P = styled.p`
-    color: white;
+    color: ${({ theme }) => theme.COLORS.TEXT_COLOR};
     text-align: center;
     font-size: 1.2rem;
 `;

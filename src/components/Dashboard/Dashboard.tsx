@@ -5,7 +5,6 @@ import useTagStore from "../../store/useTagStore";
 import Column from "../Column/Column";
 import Draggable from "../Draggable/Draggable";
 import Toolbar from "../Toolbar/Toolbar";
-import { COLOR } from "../../common/styles";
 
 interface DashboardProps {
     dashboardId: string;
@@ -14,12 +13,8 @@ interface DashboardProps {
 const DashboardContainer = styled.div`
     display: flex;
     height: 100%;
-    background: ${COLOR.MAIN_BACKGROUND};
+    background: ${({ theme }) => theme.COLORS.MAIN_BACKGROUND};
 `;
-
-const ParagraphStyle = styled.p`
-  font-size: 0.875rem;
-  `
 
 export default function Dashboard({ dashboardId }: DashboardProps) {
     const { columns, loadTasksByDashboardId } = useTaskStore();
@@ -27,7 +22,7 @@ export default function Dashboard({ dashboardId }: DashboardProps) {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [fromColumnId, setFromColumnId] = useState<string>("");
     const [fromIndex, setFormIndex] = useState<number | null>(null);
-    const finalColumns = [{ id: "todo", title: "To Do" }, { id: "progress", title: "In progress" }, { id: "done", title: "Done" }];
+    const finalColumns = [{ id: "todo", title: "To Do" }, { id: "progress", title: "In Progress" }, { id: "done", title: "Done" }];
     useEffect(() => {
         loadTasksByDashboardId(dashboardId);
         getDashboardTags(dashboardId);
@@ -53,9 +48,7 @@ export default function Dashboard({ dashboardId }: DashboardProps) {
                         setHoverIndex={setHoveredIndex}
                     >
                         {columns[fc.id].map((item: Task, index: number) => (
-                            <Draggable key={item.id} item={item} onDragOver={handleDragOver} index={index} hoverIndex={hoveredIndex} currentColumnId={fc.id} setFromColumnId={setFromColumnId} setFromIndex={setFormIndex}>
-                                <ParagraphStyle>{item.text}</ParagraphStyle>
-                            </Draggable>
+                            <Draggable key={item.id} item={item} onDragOver={handleDragOver} index={index} hoverIndex={hoveredIndex} currentColumnId={fc.id} setFromColumnId={setFromColumnId} setFromIndex={setFormIndex}/>
                         ))}
                     </Column>
                 )

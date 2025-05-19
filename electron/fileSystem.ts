@@ -2,69 +2,79 @@ import { app } from "electron";
 import * as fs from "fs";
 import * as path from "path";
 
-interface Task {
+export interface Task {
     id: string;
     title: string;
     text?: string;
 }
 
-interface DashboardColumnData {
+export interface DashboardColumnData {
     todo: Task[];
     progress: Task[];
     done: Task[];
 }
 
-interface Dashboard {
+export interface Dashboard {
     id: string;
     title: string;
     tags: string[];
     columns: DashboardColumnData;
+    createdAt?: string;
     updatedAt?: string;
 }
 
-const DEFAULT_DATA: Dashboard[] = [];
+export interface SavedData {
+    isLightMode: boolean;
+    dashboards: Dashboard[];
+}
 
+const DEFAULT_DASHBOARDS: Dashboard[] = [];
+const DEFAULT_APPSTATE: SavedData = { isLightMode: false, dashboards: [] };
 
 const getSavePath = (): string => {
-    const userDataDir = app.getPath('userData');
-    const savesDir = path.join(userDataDir, 'saves');
-    const savePath = path.join(savesDir, 'app-data.json');
-
-    // Create saves/ directory if it doesn't exist
+    let savePath: string;
+    let savesDir: string;
+    if (app.isPackaged) {
+        const userDataDir = app.getPath('userData');
+        savesDir = path.join(userDataDir, 'saves');
+        savePath = path.join(savesDir, 'app-data.json');
+    }
+    else {
+        savesDir = path.join(__dirname, "saves");
+        savePath = path.join(savesDir, "app-data.json");
+    }
     if (!fs.existsSync(savesDir)) {
         fs.mkdirSync(savesDir, { recursive: true });
     }
 
-    // Create app-data.json if it doesn't exist
     if (!fs.existsSync(savePath)) {
-        fs.writeFileSync(savePath, JSON.stringify(DEFAULT_DATA, null, 2));
+        const initialData: SavedData = {
+            isLightMode: false,
+            dashboards: DEFAULT_DASHBOARDS
+        };
+        fs.writeFileSync(savePath, JSON.stringify(initialData, null, 2));
     }
-
     return savePath;
 };
+
 const saveTasks = (
-    dashboardData: Omit<Dashboard, "todo" | "progress" | "done" | "updatedAt">,
+    dashboardData: Omit<Dashboard, "columns" | "updatedAt" | "createdAt">,
     columnData: DashboardColumnData
 ): boolean => {
     try {
         const savePath = getSavePath();
-        let allDashboards: Dashboard[] = [];
-
         const fileData = fs.readFileSync(savePath, "utf8");
-        const parsed = JSON.parse(fileData);
-        if (!Array.isArray(parsed)) throw new Error("Invalid data format");
-        allDashboards = parsed;
+        const parsed: SavedData = JSON.parse(fileData);
+        const allDashboards = parsed.dashboards;
 
-        const dashboardIndex = allDashboards.findIndex(
-            (d) => d.id === dashboardData.id
-        );
+        const dashboardIndex = allDashboards.findIndex((d) => d.id === dashboardData.id);
+        const now = new Date().toISOString();
 
         const updatedDashboard: Dashboard = {
             ...dashboardData,
-            columns: {
-                ...columnData,
-            },
-            updatedAt: new Date().toISOString(),
+            columns: columnData,
+            updatedAt: now,
+            createdAt: dashboardIndex >= 0 ? allDashboards[dashboardIndex].createdAt : now
         };
 
         if (dashboardIndex >= 0) {
@@ -73,7 +83,12 @@ const saveTasks = (
             allDashboards.push(updatedDashboard);
         }
 
-        fs.writeFileSync(savePath, JSON.stringify(allDashboards, null, 2));
+        const dataToSave: SavedData = {
+            isLightMode: parsed.isLightMode,
+            dashboards: allDashboards
+        };
+
+        fs.writeFileSync(savePath, JSON.stringify(dataToSave, null, 2));
         console.log(`Dashboard ${dashboardData.id} saved successfully`);
         return true;
     } catch (error) {
@@ -86,40 +101,67 @@ const loadTasks = (): Dashboard[] => {
     try {
         const savePath = getSavePath();
         const data = fs.readFileSync(savePath, "utf8");
-        const parsed = JSON.parse(data);
+        const parsed: SavedData = JSON.parse(data);
 
-        if (
-            Array.isArray(parsed) &&
-            parsed.every(
-                (item) =>
-                    typeof item === "object" &&
-                    item !== null &&
-                    typeof item.id === "string" &&
-                    typeof item.title === "string" &&
-                    Array.isArray(item.columns.todo) &&
-                    Array.isArray(item.columns.progress) &&
-                    Array.isArray(item.columns.done)
-            )
-        ) {
-            return parsed as Dashboard[];
+        if (Array.isArray(parsed.dashboards)) {
+            return parsed.dashboards;
         }
 
         console.warn("Invalid data structure, returning defaults");
-        return DEFAULT_DATA;
+        return DEFAULT_DASHBOARDS;
     } catch (error) {
         console.error("Error loading tasks:", error);
-        return DEFAULT_DATA;
+        return DEFAULT_DASHBOARDS;
     }
 };
 
-const saveDashboards = (dashboards: Dashboard[]): void => {
-    const savePath = getSavePath();
+const saveDashboards = (appData: any, dashboards: Dashboard[]): void => {
     try {
-        fs.writeFileSync(savePath, JSON.stringify(dashboards, null, 2));
+        const savePath = getSavePath();
+        const dataToSave: SavedData = {
+            isLightMode: appData?.isLightMode || false,
+            dashboards: dashboards
+        };
+
+        fs.writeFileSync(savePath, JSON.stringify(dataToSave, null, 2));
         console.log("File written successfully!");
     } catch (error) {
         console.error("Error writing to file:", error);
     }
 };
+const getAppState = (): SavedData => {
+    try {
+        const savePath = getSavePath();
+        const data = fs.readFileSync(savePath, "utf8");
+        const parsed: SavedData = JSON.parse(data);
 
-export { saveTasks, loadTasks, saveDashboards, Dashboard, Task };
+        if (parsed) {
+            return parsed;
+        }
+
+        console.warn("Invalid data structure, returning defaults");
+        return DEFAULT_APPSTATE;
+    } catch (error) {
+        console.error("Error loading tasks:", error);
+        return DEFAULT_APPSTATE;
+    }
+}
+const saveSettings = (settings: SavedData): void => {
+    try {
+        const savePath = getSavePath();
+        const fileData = fs.readFileSync(savePath, "utf8");
+        const parsed: SavedData = JSON.parse(fileData);
+
+        const dataToSave: SavedData = {
+            ...parsed,
+            isLightMode: settings.isLightMode // only update isLightMode
+        };
+
+        fs.writeFileSync(savePath, JSON.stringify(dataToSave, null, 2));
+        console.log("Settings saved successfully.");
+    } catch (error) {
+        console.error("Error saving settings:", error);
+    }
+};
+
+export { saveTasks, loadTasks, saveDashboards, getAppState, saveSettings };

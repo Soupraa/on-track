@@ -1,15 +1,12 @@
 import styled from "styled-components";
 
-export const TYPOPGRAPHY  = {
+export const TYPOPGRAPHY = {
     SQUADA_ONE: '"Squada One", sans-serif',
     INTER: 'Inter, sans-serif',
     OSWALD: 'Oswald, sans-serif'
 }
 export const COLOR = {
-    MAIN_BACKGROUND: "#0a0a0a",
-    SECONDARY_BACKGROUND: "#1a1a1a",
     BORDER_COLOR: "#272727",
-    BORDER_COLOR_LIGHT: "rgb(220, 234, 255)"
 }
 export const FlexStart = styled.div`
     justify-content: flex-start;

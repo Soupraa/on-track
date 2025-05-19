@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Tag } from "./useTagStore";
 import { Task } from "./useTaskStore";
+import useAppStore from "./useAppStore";
 
 export interface Dashboard {
     id: string;
@@ -43,8 +44,7 @@ const useDashboardStore = create<DashboardState>((set, get) => {
     };
 
     const persistDashboards = async (dashboards: Dashboard[]) => {
-        console.log("SAVING DASHBOARD")
-        await window.electronAPI?.saveDashboards(dashboards);
+        await window.electronAPI?.saveDashboards({ isLightMode: useAppStore.getState().isLightMode }, dashboards);
     };
 
     return {
